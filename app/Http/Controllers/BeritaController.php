@@ -27,8 +27,8 @@ class BeritaController extends Controller
         return DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('thumbnail', function ($berita) {
-                if ($berita->thumbnail) {
-                    return '<img src="' . asset($berita->thumbnail) . '" alt="' . e($berita->judul_berita) . '"
+                if ($berita->cover_image) {
+                    return '<img src="' . $berita->cover_image . '" alt="' . e($berita->judul_berita) . '"
                                class="w-16 h-12 object-cover rounded-lg shadow-sm">';
                 }
                 return '<div class="w-16 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -69,22 +69,22 @@ class BeritaController extends Controller
                 $btn = '';
 
                 if ($currentUser->hasPermission('edit_berita')) {
-                    $btn .= '<a href="/berita/' . $berita->id . '/edit"
-                                class="px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50
-                                       hover:bg-amber-100 rounded-lg transition-colors mr-1">
+                    $btn .= '<a href="/menu/berita/' . $berita->id . '/edit"
+                                class="px-2.5 py-1.5 text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-100
+                                       hover:bg-amber-100 rounded-lg transition-colors flex items-center gap-1">
                                 Edit
                              </a>';
                 }
 
                 if ($currentUser->hasPermission('delete_berita')) {
                     $btn .= '<button onclick="hapusBerita(' . $berita->id . ', \'' . addslashes($berita->judul_berita) . '\')"
-                                class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50
-                                       hover:bg-red-100 rounded-lg transition-colors">
+                                class="px-2.5 py-1.5 text-[11px] font-semibold text-red-600 bg-red-50 border border-red-100
+                                       hover:bg-red-100 rounded-lg transition-colors flex items-center gap-1">
                                 Hapus
                              </button>';
                 }
 
-                return $btn ?: '<span class="text-xs text-gray-400">—</span>';
+                return $btn ? '<div class="flex items-center gap-1.5">' . $btn . '</div>' : '<span class="text-xs text-gray-400">—</span>';
             })
             ->rawColumns(['thumbnail', 'judul', 'excerpt', 'penulis', 'tanggal', 'aksi'])
             ->make(true);

@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Infografis;
+use App\Models\Berita;
+use App\Models\Koleksi;
+use App\Models\Testimoni;
+use Illuminate\Http\Request;
+
+class EPerpusController extends Controller
+{
+    public function index()
+    {
+        // 1. Infografis (Slider Hero)
+        $infografis = Infografis::where('is_active', true)->orderBy('order')->get();
+
+        // 2. Berita Terbaru (hanya penulis 'pustaka')
+        // Misalkan role atau nama mengandung kata pustaka, atau spesifik role 'pustakawan'
+        $beritaTerbaru = Berita::whereHas('user', function ($query) {
+            $query->where('name', 'like', '%pustaka%');
+        })->latest()->take(6)->get();
+
+        // Fallback jika tidak ada penulis bernama 'pustaka'
+        if ($beritaTerbaru->isEmpty()) {
+            $beritaTerbaru = Berita::latest()->take(6)->get();
+        }
+
+        // 3. Buku Terbaru (Koleksi)
+        $bukuTerbaru = Koleksi::latest()->take(8)->get();
+
+        // 4. Testimoni Terbaru
+        $testimoni = Testimoni::where('is_active', true)->latest()->take(6)->get();
+
+        return view('eperpus.index', compact(
+            'infografis',
+            'beritaTerbaru',
+            'bukuTerbaru',
+            'testimoni'
+        ));
+    }
+}

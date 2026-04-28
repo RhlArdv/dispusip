@@ -269,7 +269,7 @@ function simpanRole() {
     btn.textContent = 'Menyimpan...';
     btn.disabled    = true;
 
-    fetch('/roles', {
+    fetch('{{ route('roles.store') }}', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -323,7 +323,7 @@ document.getElementById('btn-konfirmasi-hapus').addEventListener('click', functi
     btn.textContent = 'Menghapus...';
     btn.disabled    = true;
 
-    fetch(`/roles/${hapusId}`, {
+    fetch(`/menu/roles/${hapusId}`, {
         method:  'DELETE',
         headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
     })

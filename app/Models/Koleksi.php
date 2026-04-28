@@ -11,9 +11,9 @@ class Koleksi extends Model
     use HasFactory;
 
     protected $fillable = [
-        'judul_koleksi2',
+        'judul_koleksi',
         'slug',
-        'foto_koleksi2',
+        'foto_koleksi',
         'kategori',
         'link',
         'isi_koleksi',
@@ -33,7 +33,7 @@ class Koleksi extends Model
 
         static::creating(function ($koleksi) {
             if (empty($koleksi->slug)) {
-                $koleksi->slug = Str::slug($koleksi->judul_koleksi2);
+                $koleksi->slug = Str::slug($koleksi->judul_koleksi);
 
                 // Handle duplicate slug
                 $originalSlug = $koleksi->slug;
@@ -46,8 +46,8 @@ class Koleksi extends Model
 
         static::updating(function ($koleksi) {
             // Update slug kalau judul berubah
-            if ($koleksi->isDirty('judul_koleksi2')) {
-                $koleksi->slug = Str::slug($koleksi->judul_koleksi2);
+            if ($koleksi->isDirty('judul_koleksi')) {
+                $koleksi->slug = Str::slug($koleksi->judul_koleksi);
 
                 // Handle duplicate slug (exclude current ID)
                 $originalSlug = $koleksi->slug;
@@ -64,13 +64,44 @@ class Koleksi extends Model
     // Helper untuk get nama kategori
     public function getKategoriNamaAttribute()
     {
-        $kategori = [
+        // Jika kategori sudah string, langsung return
+        if (!is_numeric($this->kategori)) {
+            return $this->kategori;
+        }
+
+        // Mapping dari integer ke nama (untuk backward compatibility)
+        $kategoriMap = [
             1 => 'Koleksi Terbaru',
             2 => 'Koleksi Populer',
             3 => 'Koleksi Referensi',
             4 => 'Informasi Terkini',
         ];
 
-        return $kategori[$this->kategori] ?? 'Unknown';
+        return $kategoriMap[$this->kategori] ?? $this->kategori ?? 'Unknown';
+    }
+
+    // Accessor untuk cover image — cek foto_koleksi dulu, fallback ke img pertama di isi_koleksi
+    public function getCoverImageAttribute()
+    {
+        if ($this->foto_koleksi) {
+            // Cek di public/ langsung (data baru)
+            if (file_exists(public_path($this->foto_koleksi))) {
+                return asset($this->foto_koleksi);
+            }
+            // Cek di storage/ (data lama)
+            if (file_exists(public_path('storage/' . $this->foto_koleksi))) {
+                return asset('storage/' . $this->foto_koleksi);
+            }
+        }
+
+        // Fallback: cari tag img pertama di isi_koleksi (data Summernote)
+        if ($this->isi_koleksi) {
+            preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $this->isi_koleksi, $matches);
+            if (isset($matches[1])) {
+                return $matches[1];
+            }
+        }
+
+        return null;
     }
 }

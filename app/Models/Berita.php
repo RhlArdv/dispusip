@@ -32,6 +32,23 @@ class Berita extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Accessor untuk mendapatkan gambar cover (Thumbnail atau gambar pertama dari isi konten)
+    public function getCoverImageAttribute()
+    {
+        if ($this->thumbnail) {
+            return asset($this->thumbnail);
+        }
+
+        // Cari tag img pertama di isi_berita (bisa berupa base64 atau URL)
+        preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $this->isi_berita, $matches);
+        
+        if (isset($matches[1])) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
     // Auto-generate slug saat creating
     protected static function boot()
     {

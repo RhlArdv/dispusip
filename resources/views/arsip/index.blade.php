@@ -206,7 +206,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/arsip',
+            url: '{{ route('arsip.index') }}',
             headers: { 'X-CSRF-TOKEN': csrfToken }
         },
         columns: [
@@ -218,12 +218,11 @@
             { data: 'lokasi', name: 'lokasi', orderable: false, searchable: false },
             {
                 data: null,
-                render: (data) =>
-                    `<div class="space-y-1">
-                        ${data.tingkat_badge}
-                        ${data.bentuk_badge}
-                        ${data.keterangan_badge}
-                    </div>`
+                render: (data) => {
+                    const badges = [data.tingkat_badge, data.bentuk_badge, data.keterangan_badge].filter(b => b);
+                    if (badges.length === 0) return '<span class="text-xs text-gray-400">—</span>';
+                    return `<div class="flex flex-wrap gap-1">${badges.join('')}</div>`;
+                }
             },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false },
         ],
@@ -253,7 +252,7 @@
         btn.textContent = 'Menghapus...';
         btn.disabled = true;
 
-        fetch(`/arsip/${arsipIdHapus}`, {
+        fetch(`/menu/arsip/${arsipIdHapus}`, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
         })

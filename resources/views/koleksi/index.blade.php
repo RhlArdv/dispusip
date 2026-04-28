@@ -204,7 +204,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/koleksi',
+            url: '{{ route('koleksi.index') }}',
             headers: { 'X-CSRF-TOKEN': csrfToken }
         },
         columns: [
@@ -241,7 +241,7 @@
         btn.textContent = 'Menghapus...';
         btn.disabled = true;
 
-        fetch(`/koleksi/${koleksiIdHapus}`, {
+        fetch(`/menu/koleksi/${koleksiIdHapus}`, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
         })

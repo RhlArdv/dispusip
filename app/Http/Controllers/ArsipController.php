@@ -68,26 +68,22 @@ class ArsipController extends Controller
                     '</span>';
             })
             ->addColumn('lokasi', function ($arsip) {
-                return '<span class="text-xs text-gray-600">' . e($arsip->lokasi_display) . '</span>';
+                return '<div class="text-[11px] leading-relaxed text-gray-600 min-w-[120px]">' . e($arsip->lokasi_display) . '</div>';
             })
             ->addColumn('tingkat_badge', function ($arsip) {
-                if (!$arsip->tingkat_perkembangan) {
-                    return '<span class="text-xs text-gray-400">-</span>';
-                }
+                if (!$arsip->tingkat_perkembangan) return '';
                 $colors = [
                     'ASLI DAN COPY' => 'bg-purple-100 text-purple-700',
                     'ASLI' => 'bg-blue-100 text-blue-700',
                     'COPY' => 'bg-green-100 text-green-700',
                 ];
                 $color = $colors[$arsip->tingkat_perkembangan] ?? 'bg-gray-100 text-gray-700';
-                return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ' . $color . '">'
+                return '<span class="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ' . $color . '">'
                     . e($arsip->tingkat_perkembangan) .
                     '</span>';
             })
             ->addColumn('bentuk_badge', function ($arsip) {
-                if (!$arsip->bentuk) {
-                    return '<span class="text-xs text-gray-400">-</span>';
-                }
+                if (!$arsip->bentuk) return '';
                 $colors = [
                     'TEKSTUAL' => 'bg-amber-100 text-amber-700',
                     'GAMBAR' => 'bg-pink-100 text-pink-700',
@@ -95,20 +91,18 @@ class ArsipController extends Controller
                     'AUDIO VISUAL' => 'bg-red-100 text-red-700',
                 ];
                 $color = $colors[$arsip->bentuk] ?? 'bg-gray-100 text-gray-700';
-                return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ' . $color . '">'
+                return '<span class="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ' . $color . '">'
                     . e($arsip->bentuk) .
                     '</span>';
             })
             ->addColumn('keterangan_badge', function ($arsip) {
-                if (!$arsip->keterangan) {
-                    return '<span class="text-xs text-gray-400">-</span>';
-                }
+                if (!$arsip->keterangan) return '';
                 $colors = [
                     'TELAH DIGITALISASI' => 'bg-teal-100 text-teal-700',
                     'BELUM DIGITALISASI' => 'bg-red-100 text-red-700',
                 ];
                 $color = $colors[$arsip->keterangan] ?? 'bg-gray-100 text-gray-700';
-                return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ' . $color . '">'
+                return '<span class="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ' . $color . '">'
                     . e($arsip->keterangan) .
                     '</span>';
             })
@@ -118,21 +112,21 @@ class ArsipController extends Controller
 
                 if ($currentUser->hasPermission('edit_arsip')) {
                     $btn .= '<a href="/arsip/' . $arsip->id . '/edit"
-                                class="px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50
-                                       hover:bg-amber-100 rounded-lg transition-colors mr-1">
+                                class="px-2.5 py-1.5 text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-100
+                                       hover:bg-amber-100 rounded-lg transition-colors flex items-center gap-1">
                                 Edit
                              </a>';
                 }
 
                 if ($currentUser->hasPermission('delete_arsip')) {
                     $btn .= '<button onclick="hapusArsip(' . $arsip->id . ', \'' . addslashes($arsip->indeks) . '\')"
-                                class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50
-                                       hover:bg-red-100 rounded-lg transition-colors">
+                                class="px-2.5 py-1.5 text-[11px] font-semibold text-red-600 bg-red-50 border border-red-100
+                                       hover:bg-red-100 rounded-lg transition-colors flex items-center gap-1">
                                 Hapus
                              </button>';
                 }
 
-                return $btn ?: '<span class="text-xs text-gray-400">—</span>';
+                return $btn ? '<div class="flex items-center gap-1.5">' . $btn . '</div>' : '<span class="text-xs text-gray-400">—</span>';
             })
             ->rawColumns(['indeks_badge', 'deskripsi', 'tahun_badge', 'jumlah_badge', 'lokasi', 'tingkat_badge', 'bentuk_badge', 'keterangan_badge', 'aksi'])
             ->make(true);

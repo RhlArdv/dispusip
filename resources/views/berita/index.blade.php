@@ -204,7 +204,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/berita',
+            url: '{{ route('berita.index') }}',
             headers: { 'X-CSRF-TOKEN': csrfToken }
         },
         columns: [
@@ -241,7 +241,7 @@
         btn.textContent = 'Menghapus...';
         btn.disabled = true;
 
-        fetch(`/berita/${beritaIdHapus}`, {
+        fetch(`/menu/berita/${beritaIdHapus}`, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
         })

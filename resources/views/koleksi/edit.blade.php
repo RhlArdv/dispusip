@@ -30,12 +30,12 @@
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
                     Judul Koleksi <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="judul_koleksi2" value="{{ old('judul_koleksi2', $koleksi->judul_koleksi2) }}"
+                <input type="text" name="judul_koleksi" value="{{ old('judul_koleksi', $koleksi->judul_koleksi) }}"
                        placeholder="Masukkan judul koleksi..."
                        class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm
                               focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-colors
-                              @error('judul_koleksi2') border-red-300 @enderror">
-                @error('judul_koleksi2')
+                              @error('judul_koleksi') border-red-300 @enderror">
+                @error('judul_koleksi')
                     <p class="mt-1.5 text-sm text-red-500">{{ $message }}</p>
                 @enderror
             </div>
@@ -45,15 +45,28 @@
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
                     Kategori <span class="text-red-500">*</span>
                 </label>
+                @php
+                    // Normalisasi: data lama mungkin simpan string nama, data baru simpan angka
+                    $kategoriRaw = old('kategori', $koleksi->kategori);
+                    $kategoriMap = [
+                        'Koleksi Terbaru'  => '1',
+                        'Koleksi Populer'  => '2',
+                        'Koleksi Referensi'=> '3',
+                        'Informasi Terkini'=> '4',
+                    ];
+                    $kategoriVal = is_numeric($kategoriRaw)
+                        ? (string) $kategoriRaw
+                        : ($kategoriMap[$kategoriRaw] ?? '');
+                @endphp
                 <select name="kategori"
                         class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm
                                focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-colors
                                @error('kategori') border-red-300 @enderror">
                     <option value="">-- Pilih Kategori --</option>
-                    <option value="1" {{ old('kategori', $koleksi->kategori) == '1' ? 'selected' : '' }}>Koleksi Terbaru</option>
-                    <option value="2" {{ old('kategori', $koleksi->kategori) == '2' ? 'selected' : '' }}>Koleksi Populer</option>
-                    <option value="3" {{ old('kategori', $koleksi->kategori) == '3' ? 'selected' : '' }}>Koleksi Referensi</option>
-                    <option value="4" {{ old('kategori', $koleksi->kategori) == '4' ? 'selected' : '' }}>Informasi Terkini</option>
+                    <option value="1" {{ $kategoriVal === '1' ? 'selected' : '' }}>Koleksi Terbaru</option>
+                    <option value="2" {{ $kategoriVal === '2' ? 'selected' : '' }}>Koleksi Populer</option>
+                    <option value="3" {{ $kategoriVal === '3' ? 'selected' : '' }}>Koleksi Referensi</option>
+                    <option value="4" {{ $kategoriVal === '4' ? 'selected' : '' }}>Informasi Terkini</option>
                 </select>
                 @error('kategori')
                     <p class="mt-1.5 text-sm text-red-500">{{ $message }}</p>
@@ -65,44 +78,35 @@
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
                     Foto Koleksi <span class="text-red-500">*</span>
                 </label>
-                <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-sky-300 transition-colors">
-                    <input type="file" name="foto_koleksi2" id="foto_koleksi2"
-                           accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
-                           class="hidden" onchange="previewImage(this)">
-                    <label for="foto_koleksi2" class="cursor-pointer">
-                        <div id="preview-container">
-                            @if($koleksi->foto_koleksi2)
-                                <img id="image-preview" src="{{ asset($koleksi->foto_koleksi2) }}" alt="Current" class="max-h-64 mx-auto rounded-lg shadow-sm mb-3">
-                            @else
-                                <div id="upload-placeholder" class="hidden">
-                                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                    <p class="text-sm text-gray-600 font-medium">Klik untuk upload foto</p>
-                                    <p class="text-xs text-gray-400 mt-1">JPEG, PNG, JPG, GIF, atau Webp (Maks 2MB)</p>
-                                </div>
-                            @endif
-                            @if($koleksi->foto_koleksi2)
-                                <button type="button" onclick="removeImage()"
-                                        class="text-sm text-red-600 hover:text-red-700 font-medium">
-                                    Ganti Gambar
-                                </button>
-                            @endif
-                        </div>
-                        @if(!$koleksi->foto_koleksi2)
-                        <div id="upload-placeholder">
-                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-sky-300 transition-colors">
+                    <div class="text-center">
+                        <input type="file" name="foto_koleksi" id="foto_koleksi"
+                               accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
+                               class="hidden" onchange="previewImage(this)">
+
+                        <label for="foto_koleksi"
+                               class="cursor-pointer inline-flex flex-col items-center gap-2">
+                            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <p class="text-sm text-gray-600 font-medium">Klik untuk upload foto</p>
-                            <p class="text-xs text-gray-400 mt-1">JPEG, PNG, JPG, GIF, atau Webp (Maks 2MB)</p>
+                            <span class="text-sm text-gray-600 font-medium">Klik untuk ganti foto</span>
+                            <span class="text-xs text-gray-400">JPEG, PNG, JPG, GIF, Webp (Max 2MB)</span>
+                        </label>
+
+                        {{-- Preview Image --}}
+                        <div id="foto-preview" class="mt-4 @if($koleksi->foto_koleksi) @else hidden @endif">
+                            <img src="{{ $koleksi->foto_koleksi ? asset($koleksi->foto_koleksi) : '' }}"
+                                 alt="Preview"
+                                 class="max-h-48 mx-auto rounded-lg shadow-sm">
+                            <button type="button" onclick="removeImage()"
+                                    class="mt-3 text-xs text-red-500 hover:text-red-700 font-medium">
+                                Hapus Gambar
+                            </button>
                         </div>
-                        @endif
-                    </label>
+                    </div>
                 </div>
-                @error('foto_koleksi2')
+                @error('foto_koleksi')
                     <p class="mt-1.5 text-sm text-red-500">{{ $message }}</p>
                 @enderror
             </div>
@@ -127,7 +131,7 @@
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
                     Isi Koleksi <span class="text-gray-400 text-xs">(Opsional)</span>
                 </label>
-                <textarea name="isi_koleksi" rows="6"
+                <textarea name="isi_koleksi" id="isi_koleksi" rows="6"
                           placeholder="Tulis deskripsi atau isi koleksi di sini..."
                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm
                                  focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-colors
@@ -157,25 +161,59 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
 <script>
+    let myEditor;
+    const initialData = @json($koleksi->isi_koleksi);
+
+    ClassicEditor
+        .create(document.querySelector('#isi_koleksi'), {
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'bold', 'italic', 'link', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'blockQuote', 'insertTable', '|',
+                    'undo', 'redo'
+                ]
+            },
+            language: 'id',
+            placeholder: 'Tulis deskripsi atau isi koleksi di sini...',
+            initialData: initialData
+        })
+        .then(editor => {
+            myEditor = editor;
+
+            // Sync editor content ke textarea sebelum submit
+            document.getElementById('form-koleksi').addEventListener('submit', function(e) {
+                const textarea = document.querySelector('#isi_koleksi');
+                textarea.value = myEditor.getData();
+            });
+        })
+        .catch(error => {
+            console.error('CKEditor initialization error:', error);
+        });
+
+    // Foto preview functions
     function previewImage(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
+
             reader.onload = function(e) {
-                document.getElementById('image-preview').src = e.target.result;
-                document.getElementById('preview-container').classList.remove('hidden');
-                document.getElementById('upload-placeholder')?.classList.add('hidden');
+                document.getElementById('foto-preview').classList.remove('hidden');
+                document.querySelector('#foto-preview img').src = e.target.result;
             }
+
             reader.readAsDataURL(input.files[0]);
         }
     }
 
     function removeImage() {
-        document.getElementById('foto_koleksi2').value = '';
-        document.getElementById('image-preview').src = '';
-        document.getElementById('preview-container').classList.add('hidden');
-        const placeholder = document.getElementById('upload-placeholder');
-        if (placeholder) placeholder.classList.remove('hidden');
+        const input = document.getElementById('foto_koleksi');
+        input.value = '';
+        document.getElementById('foto-preview').classList.add('hidden');
+        document.querySelector('#foto-preview img').src = '';
     }
 </script>
 @endpush

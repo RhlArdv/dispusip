@@ -431,7 +431,7 @@
         btn.textContent = 'Menghapus...';
         btn.disabled    = true;
 
-        fetch(`/users/${userIdHapus}`, {
+        fetch(`/menu/users/${userIdHapus}`, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
         })

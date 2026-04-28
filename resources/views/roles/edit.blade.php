@@ -235,7 +235,7 @@
         btn.textContent = 'Menyimpan...';
         btn.disabled    = true;
 
-        fetch(`/roles/${roleId}`, {
+        fetch(`/menu/roles/${roleId}`, {
             method:  'PUT',
             headers: {
                 'Content-Type': 'application/json',
