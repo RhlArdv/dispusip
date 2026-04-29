@@ -96,6 +96,37 @@
                 </a>
                 @endif
 
+                @php
+                    $isProfilActive = request()->routeIs('admin.tentang-kami', 'admin.visi-misi', 'admin.struktur-organisasi', 'admin.tupoksi', 'admin.kontak-kami', 'admin.pejabat.*');
+                @endphp
+                <div x-data="{ open: {{ $isProfilActive ? 'true' : 'false' }} }">
+                    <button @click="open = !open" 
+                            class="w-full relative flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all {{ $isProfilActive ? 'bg-indigo-50/50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $isProfilActive ? '2.2' : '1.8' }}" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            <span class="{{ $isProfilActive ? 'font-semibold' : '' }}">Profil Instansi</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    
+                    <div x-show="open" style="display: none;"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 -translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         class="pl-9 pr-3 pt-1 pb-2 space-y-1 mt-1">
+                        <a href="{{ route('admin.tentang-kami') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.tentang-kami') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Tentang Kami</a>
+                        <a href="{{ route('admin.visi-misi') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.visi-misi') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Visi & Misi</a>
+                        <a href="{{ route('admin.struktur-organisasi') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.struktur-organisasi') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Struktur Organisasi</a>
+                        <a href="{{ route('admin.tupoksi') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.tupoksi') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Tupoksi</a>
+                        <a href="{{ route('admin.kontak-kami') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.kontak-kami') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Kontak Kami</a>
+                        <a href="{{ route('admin.pejabat.index') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.pejabat.*') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Pejabat & Tim</a>
+                    </div>
+                </div>
+
                 @if(auth()->user()->hasPermission('view_arsip') || auth()->user()->hasPermission('create_arsip') || auth()->user()->hasPermission('edit_arsip') || auth()->user()->hasPermission('delete_arsip'))
                     <p class="px-3 pt-4 pb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Arsip</p>
                 @endif
@@ -110,66 +141,6 @@
                               d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
                     </svg>
                     <span class="flex-1">Daftar Arsip</span>
-                </a>
-                @endif
-
-                @if(auth()->user()->hasPermission('view_kategori') || auth()->user()->hasPermission('view_bentuk'))
-                    <p class="px-3 pt-4 pb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Kategori & Bentuk</p>
-                @endif
-
-                @if(auth()->user()->hasPermission('view_kategori'))
-                @php $activeKategori = request()->routeIs('kategori.*'); @endphp
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
-                          transition-all {{ $activeKategori ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                    <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $activeKategori ? '2.2' : '1.8' }}"
-                              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                    </svg>
-                    Kategori Arsip
-                </a>
-                @endif
-
-                @if(auth()->user()->hasPermission('view_bentuk'))
-                @php $activeBentuk = request()->routeIs('bentuk.*'); @endphp
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
-                          transition-all {{ $activeBentuk ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                    <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $activeBentuk ? '2.2' : '1.8' }}"
-                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    Bentuk Arsip
-                </a>
-                @endif
-
-                @if(auth()->user()->hasPermission('view_laporan_arsip') || auth()->user()->hasPermission('view_laporan_pustaka'))
-                    <p class="px-3 pt-4 pb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Laporan</p>
-                @endif
-
-                @if(auth()->user()->hasPermission('view_laporan_arsip'))
-                @php $activeLaporanArsip = request()->routeIs('laporan.arsip'); @endphp
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
-                          transition-all {{ $activeLaporanArsip ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                    <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $activeLaporanArsip ? '2.2' : '1.8' }}"
-                              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    Laporan Arsip
-                </a>
-                @endif
-
-                @if(auth()->user()->hasPermission('view_laporan_pustaka'))
-                @php $activeLaporanPustaka = request()->routeIs('laporan.pustaka'); @endphp
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
-                          transition-all {{ $activeLaporanPustaka ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                    <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $activeLaporanPustaka ? '2.2' : '1.8' }}"
-                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                    Laporan Pustaka
                 </a>
                 @endif
 
@@ -253,6 +224,17 @@
                               d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     FAQ
+                </a>
+
+                @php $activeLinkAccess = request()->routeIs('link-access.*'); @endphp
+                <a href="{{ route('link-access.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
+                          transition-all {{ $activeLinkAccess ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $activeLinkAccess ? '2.2' : '1.8' }}"
+                              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                    Link Access
                 </a>
 
                 @if(auth()->user()->hasPermission('view_berita'))

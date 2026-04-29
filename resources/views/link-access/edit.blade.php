@@ -1,0 +1,1 @@
+@extends('link-access.form')

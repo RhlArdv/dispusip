@@ -131,13 +131,13 @@
             <!-- Links -->
             <div class="hidden md:flex items-center gap-8 text-sm font-bold text-navy-800">
                 <a href="{{ url('/') }}" class="hover:text-gold-500 transition-colors">Beranda</a>
-                <a href="{{ route('public.arsip.index') }}" class="hover:text-gold-500 transition-colors">Katalog Arsip</a>
-                <a href="{{ route('public.kegiatan.index') }}" class="hover:text-gold-500 transition-colors">Agenda Kegiatan</a>
-                <a href="{{ route('public.berita.index') }}" class="hover:text-gold-500 transition-colors">Berita</a>
+                <a href="#" class="hover:text-gold-500 transition-colors">Profil</a>
+                <a href="{{ route('public.arsip.index') }}" class="hover:text-gold-500 transition-colors">Arsip</a>
+                <a href="{{ route('eperpus.index') }}" class="hover:text-gold-500 transition-colors">Perpustakaan</a>
             </div>
 
             <!-- Actions -->
-            <div class="flex items-center gap-4">
+            {{-- <div class="flex items-center gap-4">
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/dashboard') }}"
@@ -151,7 +151,7 @@
                         @endif
                     @endauth
                 @endif
-            </div>
+            </div> --}}
         </div>
     </nav>
 
