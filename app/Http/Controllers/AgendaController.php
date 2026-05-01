@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agenda;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 
 class AgendaController extends Controller

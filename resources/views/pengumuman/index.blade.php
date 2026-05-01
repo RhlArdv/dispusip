@@ -1,46 +1,44 @@
 @extends('layouts.app')
 
+@section('title', 'Manajemen Pengumuman')
+
 @section('content')
 <div class="p-4 sm:p-6 lg:p-8">
-    <div class="sm:flex sm:items-center sm:justify-between mb-8">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Manajemen Agenda</h1>
-            <p class="mt-2 text-sm text-gray-700">Kelola daftar agenda kegiatan dinas.</p>
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <h1 class="text-2xl font-bold text-gray-900 uppercase tracking-tight">Pengumuman</h1>
+            <p class="mt-2 text-sm text-gray-700">Kelola daftar pengumuman, himbauan, dan informasi publik.</p>
         </div>
-        <div class="mt-4 sm:mt-0">
-            <a href="{{ route('agenda.create') }}" class="inline-flex items-center gap-2 bg-sky-500 text-white px-4 py-2.5 rounded-xl hover:bg-sky-600 transition-colors font-medium text-sm shadow-sm shadow-sky-100">
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <a href="{{ route('pengumuman.create') }}" class="inline-flex items-center gap-2 bg-sky-500 text-white px-4 py-2.5 rounded-xl hover:bg-sky-600 transition-colors font-medium text-sm shadow-sm shadow-sky-100">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                Tambah Agenda
+                Tambah Pengumuman
             </a>
         </div>
     </div>
 
-    @if (session('success'))
-        <div class="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 flex items-start gap-3">
-            <svg class="w-5 h-5 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
-        </div>
+    @if(session('success'))
+    <div class="mt-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 font-medium flex items-center gap-3">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {{ session('success') }}
+    </div>
     @endif
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="p-6 border-b border-gray-100">
-            <h2 class="text-lg font-bold text-gray-900">Daftar Agenda</h2>
-        </div>
-        
+    <div class="mt-8 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="p-6">
             <div class="overflow-x-auto">
-                <table id="agendaTable" class="w-full text-left border-collapse">
+                <table id="pengumumanTable" class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/50">
-                            <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 w-16">No</th>
-                            <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">Judul Agenda</th>
-                            <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">Tanggal</th>
-                            <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">Tempat</th>
-                            <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">Status</th>
-                            <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 w-32">Aksi</th>
+                            <th class="px-4 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">No</th>
+                            <th class="px-4 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Tipe</th>
+                            <th class="px-4 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Judul</th>
+                            <th class="px-4 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Status</th>
+                            <th class="px-4 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Pin</th>
+                            <th class="px-4 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100 text-right">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 bg-white">
+                    <tbody class="divide-y divide-gray-50 text-sm">
                         <!-- DataTables -->
                     </tbody>
                 </table>
@@ -53,8 +51,8 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <style>
     /* DataTables styling */
-    #agendaTable_wrapper .dataTables_length,
-    #agendaTable_wrapper .dataTables_filter {
+    #pengumumanTable_wrapper .dataTables_length,
+    #pengumumanTable_wrapper .dataTables_filter {
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -62,10 +60,10 @@
         color: #6b7280;
         margin-bottom: 1rem;
     }
-    #agendaTable_wrapper .dataTables_filter {
+    #pengumumanTable_wrapper .dataTables_filter {
         justify-content: flex-end;
     }
-    #agendaTable_wrapper .dataTables_length select {
+    #pengumumanTable_wrapper .dataTables_length select {
         appearance: none;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
@@ -79,12 +77,12 @@
         cursor: pointer;
         transition: border-color 0.15s, box-shadow 0.15s;
     }
-    #agendaTable_wrapper .dataTables_length select:focus {
+    #pengumumanTable_wrapper .dataTables_length select:focus {
         outline: none;
         border-color: #38bdf8;
         box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
     }
-    #agendaTable_wrapper .dataTables_filter input {
+    #pengumumanTable_wrapper .dataTables_filter input {
         padding: 0.35rem 0.75rem;
         border: 1px solid #e5e7eb;
         border-radius: 0.5rem;
@@ -93,32 +91,32 @@
         width: 200px;
         transition: border-color 0.15s, box-shadow 0.15s;
     }
-    #agendaTable_wrapper .dataTables_filter input:focus {
+    #pengumumanTable_wrapper .dataTables_filter input:focus {
         outline: none;
         border-color: #38bdf8;
         box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
     }
-    #agendaTable tbody tr { border-bottom: 1px solid #f9fafb; }
-    #agendaTable tbody tr:hover td { background: #f0f9ff !important; }
-    #agendaTable thead tr th { border-bottom: 2px solid #f3f4f6 !important; }
+    #pengumumanTable tbody tr { border-bottom: 1px solid #f9fafb; }
+    #pengumumanTable tbody tr:hover td { background: #f0f9ff !important; }
+    #pengumumanTable thead tr th { border-bottom: 2px solid #f3f4f6 !important; }
 
-    #agendaTable_wrapper .dataTables_info {
+    #pengumumanTable_wrapper .dataTables_info {
         font-size: 0.8125rem;
         color: #6b7280;
         padding-top: 0.75rem;
     }
-    #agendaTable_wrapper .dataTables_paginate {
+    #pengumumanTable_wrapper .dataTables_paginate {
         display: flex;
         align-items: center;
         justify-content: flex-end;
         gap: 0.25rem;
         padding-top: 0.75rem;
     }
-    #agendaTable_wrapper .dataTables_paginate span {
+    #pengumumanTable_wrapper .dataTables_paginate span {
         display: inline-flex;
         gap: 0.25rem;
     }
-    #agendaTable_wrapper .dataTables_paginate .paginate_button {
+    #pengumumanTable_wrapper .dataTables_paginate .paginate_button {
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
@@ -134,30 +132,30 @@
         cursor: pointer;
         transition: all 0.15s;
     }
-    #agendaTable_wrapper .dataTables_paginate .previous,
-    #agendaTable_wrapper .dataTables_paginate .next {
+    #pengumumanTable_wrapper .dataTables_paginate .previous,
+    #pengumumanTable_wrapper .dataTables_paginate .next {
         border: 1px solid #e5e7eb !important;
         background: #fff !important;
         margin: 0 0.125rem;
     }
-    #agendaTable_wrapper .dataTables_paginate .previous:hover:not(.disabled),
-    #agendaTable_wrapper .dataTables_paginate .next:hover:not(.disabled) {
+    #pengumumanTable_wrapper .dataTables_paginate .previous:hover:not(.disabled),
+    #pengumumanTable_wrapper .dataTables_paginate .next:hover:not(.disabled) {
         border-color: #38bdf8 !important;
         color: #0284c7 !important;
         background: #f0f9ff !important;
     }
-    #agendaTable_wrapper .dataTables_paginate .previous.disabled,
-    #agendaTable_wrapper .dataTables_paginate .next.disabled {
+    #pengumumanTable_wrapper .dataTables_paginate .previous.disabled,
+    #pengumumanTable_wrapper .dataTables_paginate .next.disabled {
         opacity: 0.4;
         cursor: not-allowed;
     }
-    #agendaTable_wrapper .dataTables_paginate .paginate_button:not(.previous):not(.next):hover:not(.current) {
+    #pengumumanTable_wrapper .dataTables_paginate .paginate_button:not(.previous):not(.next):hover:not(.current) {
         background: #f0f9ff !important;
         color: #0284c7 !important;
         border-color: #bae6fd !important;
     }
-    #agendaTable_wrapper .dataTables_paginate .paginate_button.current,
-    #agendaTable_wrapper .dataTables_paginate .paginate_button.current:hover {
+    #pengumumanTable_wrapper .dataTables_paginate .paginate_button.current,
+    #pengumumanTable_wrapper .dataTables_paginate .paginate_button.current:hover {
         background: #0ea5e9 !important;
         color: #fff !important;
         border-color: #0ea5e9 !important;
@@ -171,23 +169,23 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#agendaTable').DataTable({
+        $('#pengumumanTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('agenda.index') }}",
+            ajax: "{{ route('pengumuman.index') }}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
+                {data: 'tipe', name: 'tipe'},
                 {data: 'judul', name: 'judul'},
-                {data: 'tanggal', name: 'tanggal'},
-                {data: 'tempat', name: 'tempat'},
                 {data: 'is_active', name: 'is_active'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
+                {data: 'is_pinned', name: 'is_pinned'},
+                {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-right'}
             ],
             language: {
                 search: '',
-                searchPlaceholder: 'Cari agenda...',
+                searchPlaceholder: 'Cari pengumuman...',
                 lengthMenu: 'Tampilkan _MENU_ data',
-                info: 'Menampilkan _START_ – _END_ dari _TOTAL_ agenda',
+                info: 'Menampilkan _START_ – _END_ dari _TOTAL_ pengumuman',
                 infoEmpty: 'Tidak ada data',
                 paginate: { previous: '‹', next: '›' },
                 processing: '<div class="text-sky-500 text-sm py-4">Memuat data...</div>',

@@ -136,6 +136,12 @@ class PermissionSeeder extends Seeder
             // Settings
             ['key' => 'view_settings', 'display_name' => 'View Settings', 'group' => 'Settings', 'description' => 'Melihat pengaturan sistem'],
             ['key' => 'edit_settings', 'display_name' => 'Edit Settings', 'group' => 'Settings', 'description' => 'Mengedit pengaturan sistem'],
+
+            // Pengumuman
+            ['key' => 'view_pengumuman', 'display_name' => 'View Pengumuman', 'group' => 'Pengumuman', 'description' => 'Melihat daftar pengumuman'],
+            ['key' => 'create_pengumuman', 'display_name' => 'Create Pengumuman', 'group' => 'Pengumuman', 'description' => 'Membuat pengumuman baru'],
+            ['key' => 'edit_pengumuman', 'display_name' => 'Edit Pengumuman', 'group' => 'Pengumuman', 'description' => 'Mengedit pengumuman'],
+            ['key' => 'delete_pengumuman', 'display_name' => 'Delete Pengumuman', 'group' => 'Pengumuman', 'description' => 'Menghapus pengumuman'],
         ];
 
         foreach ($permissions as $permission) {

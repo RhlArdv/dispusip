@@ -35,7 +35,12 @@ class PublicAktivitasController extends Controller
             ];
         });
 
-        return view('public.aktivitas', compact('berita', 'testimoni', 'agendas'));
+        $pengumumans = \App\Models\Pengumuman::where('is_active', true)
+            ->orderBy('is_pinned', 'desc')
+            ->latest()
+            ->get();
+
+        return view('public.aktivitas', compact('berita', 'testimoni', 'agendas', 'pengumumans'));
     }
 
     public function showAgenda($slug)

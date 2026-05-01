@@ -165,7 +165,7 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         'instagramPosts',
         'chartDates',
         'chartCounts',
-        'kepalaDinas'
+        'kepalaDinas',
     ));
 });
 
@@ -315,6 +315,10 @@ Route::middleware('auth')->group(function () {
         Route::put('settings', [\App\Http\Controllers\SettingController::class, 'update'])
             ->name('settings.update')
             ->middleware(['permission:edit_settings']);
+
+        // Pengumuman Management
+        Route::resource('pengumuman', \App\Http\Controllers\PengumumanController::class)
+            ->middleware(['permission:view_pengumuman']);
     });
 });
 
