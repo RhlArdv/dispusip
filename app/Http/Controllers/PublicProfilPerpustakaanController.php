@@ -14,9 +14,9 @@ class PublicProfilPerpustakaanController extends Controller
             ->get()
             ->keyBy('slug');
 
-        // Fetch Kabid Perpustakaan: pejabat whose jabatan contains 'Perpustakaan'
+        // Fetch Kabid Perpustakaan: pejabat whose jabatan matches 'Kepala Bidang Perpustakaan'
         $kabidPerpustakaan = Pejabat::active()
-            ->where('jabatan', 'like', '%Perpustakaan%')
+            ->where('jabatan', 'like', '%Kepala Bidang Perpustakaan%')
             ->first();
 
         return view('public.eperpus.profil', compact('profiles', 'kabidPerpustakaan'));

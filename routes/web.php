@@ -47,13 +47,13 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         try {
             $response = \Illuminate\Support\Facades\Http::withHeaders([
                 'x-rapidapi-host' => env('RAPID_API_HOST'),
-                'x-rapidapi-key'  => env('RAPID_API_KEY'),
+                'x-rapidapi-key' => env('RAPID_API_KEY'),
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ])->asForm()->post('https://' . env('RAPID_API_HOST') . '/get_ig_user_posts.php', [
-                'username_or_url' => 'https://www.instagram.com/dispusipkotapadang/',
-                'pagination_token' => '',
-                'amount' => 8, // Ambil 8 postingan
-            ]);
+                        'username_or_url' => 'https://www.instagram.com/dispusipkotapadang/',
+                        'pagination_token' => '',
+                        'amount' => 8, // Ambil 8 postingan
+                    ]);
 
             if ($response->successful()) {
                 $data = $response->json();
@@ -102,20 +102,30 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
             Log::error('Instagram API Error: ' . $e->getMessage());
 
             // Return dummy data jika API gagal
-            return [[
-                ['image' => 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=400&h=400&fit=crop',
-                 'link' => 'https://instagram.com/dispusipkotapadang',
-                 'likes' => 124],
-                ['image' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=400&fit=crop',
-                 'link' => 'https://instagram.com/dispusipkotapadang',
-                 'likes' => 89],
-                ['image' => 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=400&fit=crop',
-                 'link' => 'https://instagram.com/dispusipkotapadang',
-                 'likes' => 156],
-                ['image' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=400&fit=crop',
-                 'link' => 'https://instagram.com/dispusipkotapadang',
-                 'likes' => 201],
-            ]];
+            return [
+                [
+                    [
+                        'image' => 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=400&h=400&fit=crop',
+                        'link' => 'https://instagram.com/dispusipkotapadang',
+                        'likes' => 124
+                    ],
+                    [
+                        'image' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=400&fit=crop',
+                        'link' => 'https://instagram.com/dispusipkotapadang',
+                        'likes' => 89
+                    ],
+                    [
+                        'image' => 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=400&fit=crop',
+                        'link' => 'https://instagram.com/dispusipkotapadang',
+                        'likes' => 156
+                    ],
+                    [
+                        'image' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=400&fit=crop',
+                        'link' => 'https://instagram.com/dispusipkotapadang',
+                        'likes' => 201
+                    ],
+                ]
+            ];
         }
 
         return [];
@@ -163,6 +173,8 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 Route::get('/e-perpus', [\App\Http\Controllers\EPerpusController::class, 'index'])->name('eperpus.index');
 Route::get('/e-perpus/profil', [PublicProfilPerpustakaanController::class, 'index'])->name('eperpus.profil');
 Route::get('/testimoni', [\App\Http\Controllers\PublicTestimoniController::class, 'index'])->name('public.testimoni.index');
+Route::get('/e-perpus/rekomendasi', [\App\Http\Controllers\EPerpusController::class, 'rekomendasi'])->name('public.rekomendasi');
+Route::get('/layanan', [App\Http\Controllers\EPerpusController::class, 'layanan'])->name('public.layanan');
 
 Route::prefix('jdih')->name('jdih.')->group(function () {
     Route::get('/', [JdihController::class, 'index'])->name('index');

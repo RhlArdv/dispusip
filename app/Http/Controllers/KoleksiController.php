@@ -118,19 +118,18 @@ class KoleksiController extends Controller
     {
         $validated = $request->validate([
             'judul_koleksi' => 'required|string|max:255',
-            'foto_koleksi' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'kategori' => 'required|in:1,2,3,4',
-            'link' => 'nullable|url|max:500',
-            'isi_koleksi' => 'nullable|string',
+            'foto_koleksi'  => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'kategori'      => 'required|in:1,2,3,4',
+            'link'          => 'nullable|url|max:500',
+            'isi_koleksi'   => 'nullable|string',
         ], [
             'judul_koleksi.required' => 'Judul koleksi wajib diisi.',
-            'foto_koleksi.required' => 'Foto koleksi wajib diupload.',
-            'foto_koleksi.image' => 'Foto harus berupa gambar.',
-            'foto_koleksi.mimes' => 'Foto harus berformat jpeg, png, jpg, gif, atau webp.',
-            'foto_koleksi.max' => 'Ukuran foto maksimal 2MB.',
-            'kategori.required' => 'Kategori wajib dipilih.',
-            'kategori.in' => 'Kategori tidak valid.',
-            'link.url' => 'Link harus berupa URL yang valid.',
+            'foto_koleksi.image'     => 'Foto harus berupa gambar.',
+            'foto_koleksi.mimes'     => 'Foto harus berformat jpeg, png, jpg, gif, atau webp.',
+            'foto_koleksi.max'       => 'Ukuran foto maksimal 2MB.',
+            'kategori.required'      => 'Kategori wajib dipilih.',
+            'kategori.in'            => 'Kategori tidak valid.',
+            'link.url'               => 'Link harus berupa URL yang valid.',
         ]);
 
         // Handle file upload

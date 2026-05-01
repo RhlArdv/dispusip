@@ -80,27 +80,18 @@ class Koleksi extends Model
         return $kategoriMap[$this->kategori] ?? $this->kategori ?? 'Unknown';
     }
 
-    // Accessor untuk cover image — cek foto_koleksi dulu, fallback ke img pertama di isi_koleksi
-    public function getCoverImageAttribute()
+    // Accessor untuk cover image:
+    // Prioritas 1 → foto_koleksi (foto yang diupload langsung)
+    // Prioritas 2 → gambar pertama yang ditemukan di isi_koleksi (konten rich text)
+    public function getCoverImageAttribute(): ?string
     {
         if ($this->foto_koleksi) {
-            // Cek di public/ langsung (data baru)
-            if (file_exists(public_path($this->foto_koleksi))) {
-                return '/' . ltrim($this->foto_koleksi, '/');
-            }
-            // Cek di storage/ (data lama)
-            if (file_exists(public_path('storage/' . $this->foto_koleksi))) {
-                return '/storage/' . ltrim($this->foto_koleksi, '/');
-            }
-            
-            // Fallback default storage url if file_exists fails but db has data
             return \Illuminate\Support\Facades\Storage::url($this->foto_koleksi);
         }
 
-        // Fallback: cari tag img pertama di isi_koleksi (data Summernote)
         if ($this->isi_koleksi) {
-            preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $this->isi_koleksi, $matches);
-            if (isset($matches[1])) {
+            preg_match('/<img[^>]+src=["\']([^"\'<>]+)["\']/i', $this->isi_koleksi, $matches);
+            if (!empty($matches[1])) {
                 return $matches[1];
             }
         }

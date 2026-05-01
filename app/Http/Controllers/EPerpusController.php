@@ -6,6 +6,7 @@ use App\Models\Infografis;
 use App\Models\Berita;
 use App\Models\Koleksi;
 use App\Models\Testimoni;
+use App\Models\Buku;
 use Illuminate\Http\Request;
 
 class EPerpusController extends Controller
@@ -35,8 +36,8 @@ class EPerpusController extends Controller
         //    Tiap kategori max 8 item, diurutkan terbaru
         $koleksiPerKategori = Koleksi::latest()
             ->get()
-            ->groupBy(fn ($item) => $item->kategori ?? 'Umum')
-            ->map(fn ($items) => $items->take(8));
+            ->groupBy(fn($item) => $item->kategori_nama ?? 'Umum')
+            ->map(fn($items) => $items->take(8));
 
         return view('eperpus.index', compact(
             'infografis',
@@ -45,5 +46,23 @@ class EPerpusController extends Controller
             'testimoni',
             'koleksiPerKategori'
         ));
+    }
+
+    public function rekomendasi()
+    {
+
+        $buku = Buku::with('kategoriBuku')->latest()->take(10)->get();
+
+        $koleksiPerKategori = Koleksi::latest()
+            ->get()
+            ->groupBy(fn($item) => $item->kategori_nama ?? 'Umum');
+
+        return view('public.rekomendasi', compact('buku', 'koleksiPerKategori'));
+    }
+
+    public function layanan()
+    {
+        // Karena datanya statis/hardcoded di view, kita cukup return view-nya saja
+        return view('public.layanan'); // Sesuaikan path folder view kamu, misal 'eperpus.layanan'
     }
 }
