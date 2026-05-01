@@ -116,7 +116,7 @@
     @stack('styles')
 </head>
 
-<body class="antialiased selection:bg-gold-500 selection:text-navy-900">
+<body class="antialiased selection:bg-gold-500 selection:text-navy-900 pb-24 md:pb-0">
 
     <!-- Clean Full-Width Navbar -->
     <nav
@@ -229,7 +229,7 @@
 
             <div
                 class="pb-8 flex flex-col md:flex-row justify-between items-center text-xs text-navy-500 font-medium border-t border-navy-900 pt-8">
-                <p>&copy; {{ date('Y') }} Pemerintah Kota Padang.</p>
+                <p>&copy; {{ date('Y') }} Diskominfo Kota Padang.</p>
                 <div class="flex gap-4 mt-4 md:mt-0">
                     <a href="#" class="hover:text-gold-400 transition-colors">Kebijakan Privasi</a>
                     <a href="#" class="hover:text-gold-400 transition-colors">Syarat & Ketentuan</a>
@@ -237,6 +237,40 @@
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Bottom Navigation (Floating Pill) -->
+    <div class="md:hidden fixed bottom-4 inset-x-0 mx-auto w-[90%] max-w-[400px] z-50 animate-fade-in-up delay-300">
+        <div class="bg-white/90 backdrop-blur-xl border border-gray-200 shadow-[0_10px_40px_rgba(0,0,0,0.1)] rounded-full p-1.5 flex justify-around items-center">
+            <!-- Beranda -->
+            <a href="{{ url('/') }}" class="flex flex-col items-center justify-center w-14 h-12 rounded-full {{ request()->is('/') ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:text-navy-900 hover:bg-gray-50' }} transition-all active:scale-95">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wide">Beranda</span>
+            </a>
+            <!-- Profil -->
+            <a href="#" class="flex flex-col items-center justify-center w-14 h-12 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-50 transition-all active:scale-95">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wide">Profil</span>
+            </a>
+            <!-- Arsip -->
+            <a href="{{ route('public.arsip.index') }}" class="flex flex-col items-center justify-center w-14 h-12 rounded-full {{ request()->routeIs('public.arsip.*') ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:text-navy-900 hover:bg-gray-50' }} transition-all active:scale-95">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wide">Arsip</span>
+            </a>
+            <!-- Perpustakaan -->
+            <a href="{{ route('eperpus.index') }}" class="flex flex-col items-center justify-center w-14 h-12 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-50 transition-all active:scale-95">
+                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wide">Perpus</span>
+            </a>
+        </div>
+    </div>
 
     @stack('scripts')
 </body>

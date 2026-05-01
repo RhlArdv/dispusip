@@ -132,38 +132,48 @@
 @endpush
 
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     $(document).ready(function() {
         const table = $('#tabel-link-access').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('link-access.index') }}',
+            ajax: {
+                url: '{{ route('link-access.index') }}',
+                headers: { 'X-CSRF-TOKEN': csrfToken, 'X-Requested-With': 'XMLHttpRequest' }
+            },
             columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false },
-                { data: 'icon', name: 'icon' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'icon', name: 'icon', orderable: false, searchable: false },
                 { data: 'judul', name: 'judul' },
                 { data: 'url', name: 'url' },
-                { data: 'penulis', name: 'penulis' },
-                { data: 'tanggal', name: 'tanggal' },
-                { data: 'aksi', name: 'aksi', orderable: false }
+                { data: 'penulis', name: 'penulis', orderable: false, searchable: false },
+                { data: 'tanggal', name: 'tanggal', orderable: false, searchable: false },
+                { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
             ],
             order: [[2, 'asc']],
             language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Cari link...",
-                lengthMenu: "Tampilkan _MENU_ data per halaman",
-                zeroRecords: "Tidak ada data yang ditemukan",
-                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                infoEmpty: "Tidak ada data yang tersedia",
-                infoFiltered: "(difilter dari _MAX_ total data)",
+                search: '',
+                searchPlaceholder: 'Cari link...',
+                lengthMenu: 'Tampilkan _MENU_ data per halaman',
+                zeroRecords: 'Tidak ada data yang ditemukan',
+                info: 'Menampilkan _START_ sampai _END_ dari _TOTAL_ data',
+                infoEmpty: 'Tidak ada data yang tersedia',
+                infoFiltered: '(difilter dari _MAX_ total data)',
+                processing: '<div class="text-sky-500 text-sm py-4">Memuat data...</div>',
                 paginate: {
-                    first: "Pertama",
-                    last: "Terakhir",
-                    next: "Selanjutnya",
-                    previous: "Sebelumnya"
+                    first: 'Pertama',
+                    last: 'Terakhir',
+                    next: '›',
+                    previous: '‹'
                 }
-            }
+            },
+            lengthMenu: [10, 25, 50],
+            pageLength: 10,
         });
     });
 

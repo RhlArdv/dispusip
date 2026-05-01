@@ -102,7 +102,7 @@
                 
                 @if($kepalaDinas)
                 <div class="relative z-10 bg-white p-4 rounded-[2.5rem] shadow-[0_20px_50px_rgba(15,36,64,0.1)] border border-navy-50 group transform hover:-translate-y-2 transition-transform duration-500">
-                    <div class="aspect-[3/4] rounded-[2rem] overflow-hidden relative bg-navy-900">
+                    <div class="aspect-[4/5] md:aspect-[3/4] rounded-[2rem] overflow-hidden relative bg-navy-900">
                         @if($kepalaDinas->image)
                             <img src="{{ asset('storage/' . $kepalaDinas->image) }}" alt="{{ $kepalaDinas->nama }}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-in-out">
                         @else
@@ -112,9 +112,9 @@
                         @endif
                         
                         <!-- Overlay Gradient: Subtle by default, darker on hover -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-navy-900/70 via-transparent to-transparent group-hover:via-navy-900/40 transition-all duration-500"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-900/90 via-navy-900/40 md:via-transparent to-transparent group-hover:via-navy-900/50 transition-all duration-500"></div>
                         
-                        <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="absolute bottom-0 left-0 right-0 p-5 md:p-8 text-white">
                             <span class="px-4 py-1.5 rounded-full bg-gold-500 text-navy-900 text-[10px] font-black uppercase tracking-widest mb-4 inline-block">Kepala Dinas</span>
                             <h3 class="text-3xl font-black leading-tight mb-1">{{ $kepalaDinas->nama }}</h3>
                             <p class="text-navy-200 font-medium">{{ $kepalaDinas->jabatan }}</p>

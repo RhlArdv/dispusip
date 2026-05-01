@@ -16,7 +16,6 @@ class EPerpusController extends Controller
         $infografis = Infografis::where('is_active', true)->orderBy('order')->get();
 
         // 2. Berita Terbaru (hanya penulis 'pustaka')
-        // Misalkan role atau nama mengandung kata pustaka, atau spesifik role 'pustakawan'
         $beritaTerbaru = Berita::whereHas('user', function ($query) {
             $query->where('name', 'like', '%pustaka%');
         })->latest()->take(6)->get();
@@ -32,11 +31,19 @@ class EPerpusController extends Controller
         // 4. Testimoni Terbaru
         $testimoni = Testimoni::where('is_active', true)->latest()->take(6)->get();
 
+        // 5. Koleksi Per Kategori — ambil semua, kelompokkan per kategori
+        //    Tiap kategori max 8 item, diurutkan terbaru
+        $koleksiPerKategori = Koleksi::latest()
+            ->get()
+            ->groupBy(fn ($item) => $item->kategori ?? 'Umum')
+            ->map(fn ($items) => $items->take(8));
+
         return view('eperpus.index', compact(
             'infografis',
             'beritaTerbaru',
             'bukuTerbaru',
-            'testimoni'
+            'testimoni',
+            'koleksiPerKategori'
         ));
     }
 }

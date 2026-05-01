@@ -11,12 +11,15 @@ class LinkAccessController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        // DataTables serverSide selalu mengirim parameter 'draw'
+        // Gunakan keduanya sebagai fallback agar lebih andal
+        if ($request->ajax() || $request->has('draw')) {
             \Log::info('DataTable AJAX request received', [
                 'user_id' => Auth::id(),
                 'user_authenticated' => Auth::check(),
                 'ajax' => $request->ajax(),
                 'wants_json' => $request->wantsJson(),
+                'has_draw' => $request->has('draw'),
             ]);
             return $this->dataTable();
         }

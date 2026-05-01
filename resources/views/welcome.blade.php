@@ -27,13 +27,13 @@
                     </div>
 
                     <h1
-                        class="text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-black leading-[0.85] tracking-tighter text-navy-900 uppercase opacity-0 animate-fade-in-up delay-100">
+                        class="text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-black leading-[0.85] tracking-tighter text-navy-900 uppercase opacity-0 animate-fade-in-up delay-100">
                         Dinas<br>
                         <span
                             class="text-transparent bg-clip-text bg-gradient-to-br from-navy-500 to-navy-900">Perpustakaan</span><br>
                         <div class="flex items-center gap-4 mt-4">
                             <span
-                                class="text-gold-500 italic font-serif lowercase text-6xl lg:text-[6rem] xl:text-[7rem] translate-y-1 md:translate-y-2">dan</span>
+                                class="text-gold-500 italic font-serif lowercase text-4xl md:text-6xl lg:text-[6rem] xl:text-[7rem] translate-y-1 md:translate-y-2">dan</span>
                             <span class="relative z-10 text-navy-900">
                                 Kearsipan
                                 <!-- Asymmetric underline -->
@@ -551,7 +551,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
 
                 <!-- Left: Typography -->
-                <div class="lg:col-span-5 sticky top-32">
+                <div class="lg:col-span-5 lg:sticky lg:top-32 mb-10 lg:mb-0 relative z-10 bg-white/80 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none p-2 lg:p-0">
                     <span class="text-navy-500 font-bold tracking-wider uppercase text-sm mb-4 block">
                         Pertanyaan Yang Sering Ditanyakan
                     </span>
@@ -866,6 +866,8 @@
                     }
                 },
                 yaxis: {
+                    min: 0,
+                    forceNiceScale: true,
                     labels: {
                         style: { colors: '#64748b', fontSize: '12px', fontWeight: 500 }
                     }

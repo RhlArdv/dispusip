@@ -178,6 +178,8 @@ Route::get('/kegiatan/{slug}', [\App\Http\Controllers\PublicKegiatanController::
 
 Route::get('/arsip', [\App\Http\Controllers\PublicArsipController::class, 'index'])->name('public.arsip.index');
 
+Route::get('/koleksi/{slug}', [\App\Http\Controllers\PublicKoleksiController::class, 'show'])->name('public.koleksi.show');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
