@@ -136,7 +136,7 @@
                 <!-- <a href="{{ url('/') }}" class="hover:text-gold-500 transition-colors">Portal Utama</a> -->
                 <a href="{{ route('eperpus.index') }}" class="hover:text-gold-500 transition-colors">Beranda
                     E-Perpus</a>
-                <a href="#" target="_blank" class="hover:text-gold-500 transition-colors">Profil E-Perpus</a>
+                <a href="{{ route('eperpus.profil') }}" class="{{ request()->routeIs('eperpus.profil') ? 'text-gold-500' : 'hover:text-gold-500 transition-colors' }}">Profil E-Perpus</a>
                 <a href="#" target="_blank" class="hover:text-gold-500 transition-colors">Layanan</a>
                 <a href="{{ route('public.aktivitas.index') }}" class="hover:text-gold-500 transition-colors">Aktivitas</a>
                 <a href="#" target="_blank" class="hover:text-gold-500 transition-colors">Rekomendasi</a>
@@ -256,7 +256,7 @@
                 <span class="text-[8px] font-bold tracking-wide">Beranda</span>
             </a>
             <!-- Profil -->
-            <a href="#" class="flex flex-col items-center justify-center w-12 h-11 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-50 transition-all active:scale-95">
+            <a href="{{ route('eperpus.profil') }}" class="flex flex-col items-center justify-center w-12 h-11 rounded-full {{ request()->routeIs('eperpus.profil') ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:text-navy-900 hover:bg-gray-50' }} transition-all active:scale-95">
                 <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>

@@ -26,6 +26,13 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // Eager load permissions setelah login
+        $user = Auth::user();
+        $user->loadPermissions();
+
+        // Cache permission keys di session
+        session(['user_permissions' => $user->getPermissions()->toArray()]);
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

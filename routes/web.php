@@ -12,6 +12,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PejabatController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BukuController;
+use App\Http\Controllers\KategoriBukuController;
+use App\Http\Controllers\PublicBukuController;
+use App\Http\Controllers\ProfilPerpustakaanController;
+use App\Http\Controllers\PublicProfilPerpustakaanController;
 use App\Models\Berita;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -156,6 +161,7 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 
 // Public routes
 Route::get('/e-perpus', [\App\Http\Controllers\EPerpusController::class, 'index'])->name('eperpus.index');
+Route::get('/e-perpus/profil', [PublicProfilPerpustakaanController::class, 'index'])->name('eperpus.profil');
 Route::get('/testimoni', [\App\Http\Controllers\PublicTestimoniController::class, 'index'])->name('public.testimoni.index');
 
 Route::prefix('jdih')->name('jdih.')->group(function () {
@@ -180,6 +186,12 @@ Route::get('/arsip', [\App\Http\Controllers\PublicArsipController::class, 'index
 
 Route::get('/koleksi/{slug}', [\App\Http\Controllers\PublicKoleksiController::class, 'show'])->name('public.koleksi.show');
 
+// Public Book Catalog
+Route::prefix('buku')->name('public.buku.')->group(function () {
+    Route::get('/', [PublicBukuController::class, 'index'])->name('index');
+    Route::get('/{slug}', [PublicBukuController::class, 'show'])->name('show');
+});
+
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -191,16 +203,21 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('menu')->group(function () {
         // User Management
-        Route::resource('users', UserController::class);
+        Route::resource('users', UserController::class)
+            ->middleware(['permission:view_users']);
 
         // Role Management
-        Route::resource('roles', RoleController::class);
+        Route::resource('roles', RoleController::class)
+            ->middleware(['permission:view_roles']);
         Route::get('roles/{role}/edit-permissions', [RoleController::class, 'edit'])
-            ->name('roles.edit-permissions');
+            ->name('roles.edit-permissions')
+            ->middleware(['permission:edit_roles']);
         Route::put('roles/{role}/permissions', [RoleController::class, 'update'])
-            ->name('roles.update-permissions');
+            ->name('roles.update-permissions')
+            ->middleware(['permission:edit_roles']);
         Route::post('roles/{role}/reset', [RoleController::class, 'reset'])
-            ->name('roles.reset');
+            ->name('roles.reset')
+            ->middleware(['permission:edit_roles']);
 
         //Profil Management
         Route::get('profil/tentang-kami', [ProfilController::class, 'tentangKami'])->name('admin.tentang-kami');
@@ -209,6 +226,14 @@ Route::middleware('auth')->group(function () {
         Route::get('profil/tupoksi', [ProfilController::class, 'tupoksi'])->name('admin.tupoksi');
         Route::get('profil/kontak-kami', [ProfilController::class, 'kontakKami'])->name('admin.kontak-kami');
         Route::put('profil/{id}', [ProfilController::class, 'update'])->name('admin.profil.update');
+
+        // Profil E-Perpus (Bidang Perpustakaan)
+        Route::prefix('profil-perpustakaan')->name('admin.profil-perpustakaan.')->group(function () {
+            Route::get('sejarah', [ProfilPerpustakaanController::class, 'sejarah'])->name('sejarah');
+            Route::get('tupoksi', [ProfilPerpustakaanController::class, 'tupoksi'])->name('tupoksi');
+            Route::get('struktur', [ProfilPerpustakaanController::class, 'struktur'])->name('struktur');
+            Route::put('{id}', [ProfilPerpustakaanController::class, 'update'])->name('update');
+        });
 
         // Arsip Management
         Route::resource('arsip', ArsipController::class)
@@ -222,41 +247,62 @@ Route::middleware('auth')->group(function () {
         Route::resource('koleksi', KoleksiController::class)
             ->middleware(['permission:view_koleksi']);
 
+        // Kategori Buku Management
+        Route::resource('kategori-buku', KategoriBukuController::class)
+            ->middleware(['permission:view_kategori_buku'])
+            ->names('kategori-buku');
+
+        // Buku Management
+        Route::resource('buku', BukuController::class)
+            ->middleware(['permission:view_buku']);
+
         // Kegiatan Management
         Route::resource('kegiatan', KegiatanController::class)
             ->middleware(['permission:view_kegiatan']);
 
         // FAQ Management
-        Route::resource('faq', \App\Http\Controllers\FaqController::class);
+        Route::resource('faq', \App\Http\Controllers\FaqController::class)
+            ->middleware(['permission:view_faq']);
 
         // Testimoni Management
-        Route::resource('testimoni', \App\Http\Controllers\TestimoniController::class);
+        Route::resource('testimoni', \App\Http\Controllers\TestimoniController::class)
+            ->middleware(['permission:view_testimoni']);
 
         // Agenda Management
-        Route::resource('agenda', \App\Http\Controllers\AgendaController::class);
+        Route::resource('agenda', \App\Http\Controllers\AgendaController::class)
+            ->middleware(['permission:view_agenda']);
 
         // Infografis Management (E-Perpus)
-        Route::resource('infografis', \App\Http\Controllers\InfografisController::class);
+        Route::resource('infografis', \App\Http\Controllers\InfografisController::class)
+            ->middleware(['permission:view_infografis']);
 
         // Pejabat Management
-        Route::resource('pejabat', PejabatController::class)->names('admin.pejabat');
+        Route::resource('pejabat', PejabatController::class)
+            ->names('admin.pejabat')
+            ->middleware(['permission:view_pejabat']);
 
         // Link Access Management
-        Route::resource('link-access', LinkAccessController::class);
+        Route::resource('link-access', LinkAccessController::class)
+            ->middleware(['permission:view_link_access']);
 
         // Tickets Management
         Route::get('tickets', [\App\Http\Controllers\TicketController::class, 'index'])
-            ->name('tickets.index');
+            ->name('tickets.index')
+            ->middleware(['permission:view_tickets']);
         Route::put('tickets/{id}/status', [\App\Http\Controllers\TicketController::class, 'updateStatus'])
-            ->name('tickets.update-status');
+            ->name('tickets.update-status')
+            ->middleware(['permission:edit_tickets']);
         Route::delete('tickets/{id}', [\App\Http\Controllers\TicketController::class, 'destroy'])
-            ->name('tickets.destroy');
+            ->name('tickets.destroy')
+            ->middleware(['permission:delete_tickets']);
 
         // Settings Management
         Route::get('settings', [\App\Http\Controllers\SettingController::class, 'index'])
-            ->name('settings.index');
+            ->name('settings.index')
+            ->middleware(['permission:view_settings']);
         Route::put('settings', [\App\Http\Controllers\SettingController::class, 'update'])
-            ->name('settings.update');
+            ->name('settings.update')
+            ->middleware(['permission:edit_settings']);
     });
 });
 

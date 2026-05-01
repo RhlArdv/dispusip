@@ -533,13 +533,13 @@
                                         class="group bg-white rounded-2xl overflow-hidden border border-navy-100 hover:border-gold-300 hover:shadow-xl hover:shadow-navy-900/5 transition-all duration-400 flex flex-col">
 
                                         {{-- Cover --}}
-                                        <div class="relative aspect-[3/4] bg-navy-50 overflow-hidden flex-shrink-0">
+                                        <div class="relative w-full bg-navy-50 overflow-hidden flex-shrink-0" style="padding-bottom: 133.33%;">
                                             @if($koleksi->cover_image)
                                                 <img src="{{ $koleksi->cover_image }}" alt="{{ $koleksi->judul_koleksi }}"
-                                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                             @else
                                                 <div
-                                                    class="w-full h-full flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-navy-100 to-navy-200">
+                                                    class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-navy-100 to-navy-200">
                                                     <svg class="w-10 h-10 text-navy-400" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"

@@ -101,7 +101,7 @@
 
             {{-- Tombol aksi --}}
             <div class="flex gap-2">
-                @if(auth()->user()->hasPermission('edit_roles'))
+                @if(auth()->user()->hasPermission('edit_roles') && $role->name !== 'admin')
                 <a href="{{ route('roles.edit', $role->id) }}"
                    class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold
                           {{ $color['light'] }} {{ $color['text'] }} border {{ $color['border'] }}

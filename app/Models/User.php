@@ -35,6 +35,15 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function loadPermissions(): void
+    {
+        if (!$this->relationLoaded('role')) {
+            $this->load('role.permissions');
+        } elseif ($this->role && !$this->role->relationLoaded('permissions')) {
+            $this->role->load('permissions');
+        }
+    }
+
     public function hasPermission(string $key): bool
     {
         if ($this->isAdmin()) {
@@ -44,6 +53,9 @@ class User extends Authenticatable
         if (! $this->role) {
             return false;
         }
+
+        // Pastikan permissions sudah ter-load
+        $this->loadPermissions();
 
         return $this->role->permissions->contains('key', $key);
     }
@@ -60,10 +72,22 @@ class User extends Authenticatable
 
     public function getPermissions(): \Illuminate\Support\Collection
     {
-        if ($this->isAdmin()) {
-            return Permission::pluck('key');
+        // Cek session cache dulu
+        if (session()->has('user_permissions')) {
+            return collect(session('user_permissions'));
         }
 
-        return $this->role?->permissions->pluck('key') ?? collect();
+        if ($this->isAdmin()) {
+            $permissions = Permission::pluck('key');
+        } else {
+            // Pastikan permissions ter-load
+            $this->loadPermissions();
+            $permissions = $this->role?->permissions->pluck('key') ?? collect();
+        }
+
+        // Simpan ke session cache
+        session(['user_permissions' => $permissions->toArray()]);
+
+        return $permissions;
     }
 }

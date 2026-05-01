@@ -237,8 +237,8 @@ class RoleController extends Controller
                 'view_arsip',
                 'view_laporan_pustaka', 'download_laporan_pustaka',
                 'view_berita', 'create_berita', 'edit_berita', 'delete_berita',
-                'view_galeri', 'create_galeri', 'edit_galeri', 'delete_galeri',
-                'view_video', 'create_video', 'edit_video', 'delete_video',
+                'view_koleksi', 'create_koleksi', 'edit_koleksi', 'delete_koleksi',
+                'view_kegiatan', 'create_kegiatan', 'edit_kegiatan', 'delete_kegiatan',
             ],
             default => [],
         };

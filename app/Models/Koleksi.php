@@ -86,12 +86,15 @@ class Koleksi extends Model
         if ($this->foto_koleksi) {
             // Cek di public/ langsung (data baru)
             if (file_exists(public_path($this->foto_koleksi))) {
-                return asset($this->foto_koleksi);
+                return '/' . ltrim($this->foto_koleksi, '/');
             }
             // Cek di storage/ (data lama)
             if (file_exists(public_path('storage/' . $this->foto_koleksi))) {
-                return asset('storage/' . $this->foto_koleksi);
+                return '/storage/' . ltrim($this->foto_koleksi, '/');
             }
+            
+            // Fallback default storage url if file_exists fails but db has data
+            return \Illuminate\Support\Facades\Storage::url($this->foto_koleksi);
         }
 
         // Fallback: cari tag img pertama di isi_koleksi (data Summernote)

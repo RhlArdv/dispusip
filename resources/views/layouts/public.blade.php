@@ -18,6 +18,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -131,7 +132,7 @@
             <!-- Links -->
             <div class="hidden md:flex items-center gap-8 text-sm font-bold text-navy-800">
                 <a href="{{ url('/') }}" class="hover:text-gold-500 transition-colors">Beranda</a>
-                <a href="#" class="hover:text-gold-500 transition-colors">Profil</a>
+                <a href="{{ url('/profil/tentang-kami') }}" class="hover:text-gold-500 transition-colors">Profil</a>
                 <a href="{{ route('public.arsip.index') }}" class="hover:text-gold-500 transition-colors">Arsip</a>
                 <a href="{{ route('eperpus.index') }}" class="hover:text-gold-500 transition-colors">Perpustakaan</a>
             </div>

@@ -8,6 +8,10 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- CDN Fallback (For Mobile Testing/Firewall issues) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 
@@ -44,6 +48,7 @@
 
     {{-- Mobile overlay --}}
     <div x-show="sidebarOpen"
+         style="display: none;"
          x-transition.opacity
          @click="sidebarOpen = false"
          class="fixed inset-0 z-20 bg-black/30 backdrop-blur-sm lg:hidden"></div>
@@ -174,6 +179,32 @@
                 </a>
                 @endif
 
+                @if(auth()->user()->hasPermission('view_kategori_buku'))
+                @php $activeKategoriBuku = request()->routeIs('kategori-buku.*'); @endphp
+                <a href="{{ route('kategori-buku.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
+                          transition-all {{ $activeKategoriBuku ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $activeKategoriBuku ? '2.2' : '1.8' }}"
+                              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                    </svg>
+                    Kategori Buku
+                </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('view_buku'))
+                @php $activeBuku = request()->routeIs('buku.*'); @endphp
+                <a href="{{ route('buku.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
+                          transition-all {{ $activeBuku ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $activeBuku ? '2.2' : '1.8' }}"
+                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    <span class="flex-1">Buku</span>
+                </a>
+                @endif
+
                 @if(auth()->user()->hasPermission('view_kegiatan'))
                 @php $activeKegiatan = request()->routeIs('kegiatan.*'); @endphp
                 <a href="{{ route('kegiatan.index') }}"
@@ -272,6 +303,33 @@
                         </svg>
                         Agenda Kegiatan
                     </a>
+
+                    {{-- Profil E-Perpus Sub-menu --}}
+                    @php $isPProfilActive = request()->routeIs('admin.profil-perpustakaan.*'); @endphp
+                    <div x-data="{ open: {{ $isPProfilActive ? 'true' : 'false' }} }">
+                        <button @click="open = !open"
+                                class="w-full relative flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all {{ $isPProfilActive ? 'bg-indigo-50/50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $isPProfilActive ? '2.2' : '1.8' }}" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                                <span class="{{ $isPProfilActive ? 'font-semibold' : '' }}">Profil E-Perpus</span>
+                            </div>
+                            <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+
+                        <div x-show="open" style="display: none;"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="pl-9 pr-3 pt-1 pb-2 space-y-1 mt-1">
+                            <a href="{{ route('admin.profil-perpustakaan.sejarah') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.profil-perpustakaan.sejarah') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Sejarah Perpustakaan</a>
+                            <a href="{{ route('admin.profil-perpustakaan.tupoksi') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.profil-perpustakaan.tupoksi') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Tugas Pokok & Fungsi</a>
+                            <a href="{{ route('admin.profil-perpustakaan.struktur') }}" class="block px-3 py-2 rounded-lg text-xs font-medium transition-colors {{ request()->routeIs('admin.profil-perpustakaan.struktur') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">Struktur Bidang</a>
+                        </div>
+                    </div>
                 @endif
 
                 @if(auth()->user()->hasPermission('view_settings'))
@@ -380,31 +438,92 @@
 
                 <div class="flex-1"></div>
 
-                {{-- Notifikasi bell --}}
-                <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open"
-                            class="relative w-9 h-9 flex items-center justify-center rounded-xl
-                                   text-gray-500 hover:bg-gray-100 transition-colors">
+                {{-- Global Search --}}
+                <div class="relative group" x-data="{ 
+                    open: false, 
+                    search: '',
+                    menus: [
+                        @if(auth()->user()->hasPermission('view_dashboard')){ name: 'Dashboard', url: '{{ route('dashboard') }}' },@endif
+                        { name: 'Tentang Kami', url: '{{ route('admin.tentang-kami') }}' },
+                        { name: 'Visi & Misi', url: '{{ route('admin.visi-misi') }}' },
+                        { name: 'Struktur Organisasi', url: '{{ route('admin.struktur-organisasi') }}' },
+                        { name: 'Tupoksi', url: '{{ route('admin.tupoksi') }}' },
+                        { name: 'Kontak Kami', url: '{{ route('admin.kontak-kami') }}' },
+                        { name: 'Pejabat & Tim', url: '{{ route('admin.pejabat.index') }}' },
+                        @if(auth()->user()->hasPermission('view_arsip')){ name: 'Daftar Arsip', url: '{{ route('arsip.index') }}' },@endif
+                        @if(auth()->user()->hasPermission('view_berita')){ name: 'Berita', url: '{{ route('berita.index') }}' },@endif
+                        @if(auth()->user()->hasPermission('view_koleksi')){ name: 'Koleksi', url: '{{ route('koleksi.index') }}' },@endif
+                        @if(auth()->user()->hasPermission('view_kegiatan')){ name: 'Kegiatan', url: '{{ route('kegiatan.index') }}' },@endif
+                        @if(auth()->user()->hasPermission('view_galeri')){ name: 'Galeri', url: '#' },@endif
+                        @if(auth()->user()->hasPermission('view_video')){ name: 'Video', url: '#' },@endif
+                        { name: 'FAQ', url: '{{ route('faq.index') }}' },
+                        { name: 'Link Access', url: '{{ route('link-access.index') }}' },
+                        @if(auth()->user()->hasPermission('view_berita'))
+                        { name: 'Hero Infografis', url: '{{ route('infografis.index') }}' },
+                        { name: 'Testimoni', url: '{{ route('testimoni.index') }}' },
+                        { name: 'Agenda Kegiatan', url: '{{ route('agenda.index') }}' },
+                        @endif
+                        @if(auth()->user()->hasPermission('view_settings'))
+                        { name: 'Pengaturan Web', url: '{{ route('settings.index') }}' },
+                        { name: 'Tiket & Masukan', url: '{{ route('tickets.index') }}' },
+                        @endif
+                        @if(auth()->user()->hasPermission('view_users')){ name: 'Kelola User', url: '{{ route('users.index') }}' },@endif
+                        @if(auth()->user()->hasPermission('view_roles')){ name: 'Role & Permission', url: '{{ route('roles.index') }}' },@endif
+                    ],
+                    get filteredMenus() {
+                        if (this.search === '') return [];
+                        return this.menus.filter(m => m.name.toLowerCase().includes(this.search.toLowerCase())).slice(0, 6);
+                    }
+                }">
+                    <button @click="open = true; $nextTick(() => $refs.searchInput.focus())"
+                            class="relative w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 transition-colors">
                         <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
+                        <!-- Keyboard shortcut tooltip -->
+                        <div class="hidden md:flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                            Ctrl+K
+                        </div>
                     </button>
 
                     <div x-show="open"
-                         @click.outside="open = false"
+                         @click.outside="open = false; search = ''"
+                         @keydown.escape.window="open = false; search = ''"
+                         @keydown.ctrl.k.prevent.window="open = true; $nextTick(() => $refs.searchInput.focus())"
                          x-transition:enter="transition ease-out duration-150"
                          x-transition:enter-start="opacity-0 scale-95"
                          x-transition:enter-end="opacity-100 scale-100"
-                         class="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl
-                                border border-gray-100 shadow-xl shadow-gray-200/60 overflow-hidden z-50">
-                        <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-sm font-semibold text-gray-800">Notifikasi</p>
+                         class="absolute right-0 top-full mt-2 w-72 md:w-80 bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/60 overflow-hidden z-50"
+                         style="display: none;">
+                        
+                        <div class="p-3 border-b border-gray-100 relative">
+                            <svg class="w-4 h-4 text-gray-400 absolute left-6 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            <input type="text" x-ref="searchInput" x-model="search" placeholder="Cari menu... (Ctrl+K)" 
+                                   class="w-full bg-gray-50 border-none rounded-xl pl-9 pr-4 py-2.5 text-[13px] text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
                         </div>
-                        <div class="p-2 max-h-64 overflow-y-auto">
-                            <div class="py-8 text-center">
-                                <p class="text-sm text-gray-400">Tidak ada notifikasi baru</p>
+                        
+                        <div class="p-2 max-h-72 overflow-y-auto">
+                            <!-- Empty State -->
+                            <div x-show="search === ''" class="py-6 text-center">
+                                <p class="text-[13px] text-gray-400">Ketik untuk mencari menu</p>
                             </div>
+                            <!-- Not Found State -->
+                            <div x-show="search !== '' && filteredMenus.length === 0" class="py-6 text-center">
+                                <p class="text-[13px] text-gray-400">Menu tidak ditemukan</p>
+                            </div>
+                            <!-- Results -->
+                            <template x-for="(menu, index) in filteredMenus" :key="index">
+                                <a :href="menu.url" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 transition-colors group">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4 text-gray-400 group-hover:text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-[13px] font-medium text-gray-700 group-hover:text-indigo-700" x-text="menu.name"></span>
+                                </a>
+                            </template>
                         </div>
                     </div>
                 </div>
