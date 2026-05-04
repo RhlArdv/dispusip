@@ -73,7 +73,126 @@
 
 @endsection
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<style>
+    /* DataTables styling */
+    #tabel-galeri_wrapper .dataTables_length,
+    #tabel-galeri_wrapper .dataTables_filter {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+        color: #6b7280;
+        margin-bottom: 1rem;
+    }
+    #tabel-galeri_wrapper .dataTables_filter {
+        justify-content: flex-end;
+    }
+    #tabel-galeri_wrapper .dataTables_length select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        padding: 0.35rem 2rem 0.35rem 0.65rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.8125rem;
+        color: #374151;
+        background-color: #fff;
+        cursor: pointer;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    #tabel-galeri_wrapper .dataTables_length select:focus {
+        outline: none;
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    #tabel-galeri_wrapper .dataTables_filter input {
+        padding: 0.35rem 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.8125rem;
+        color: #374151;
+        width: 200px;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    #tabel-galeri_wrapper .dataTables_filter input:focus {
+        outline: none;
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    #tabel-galeri tbody tr { border-bottom: 1px solid #f9fafb; }
+    #tabel-galeri tbody tr:hover td { background: #f0f9ff !important; }
+    #tabel-galeri thead tr th { border-bottom: 2px solid #f3f4f6 !important; }
+
+    #tabel-galeri_wrapper .dataTables_info {
+        font-size: 0.8125rem;
+        color: #6b7280;
+        padding-top: 0.75rem;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.25rem;
+        padding-top: 0.75rem;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate span {
+        display: inline-flex;
+        gap: 0.25rem;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate .paginate_button {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 2rem;
+        height: 2rem;
+        padding: 0 0.5rem !important;
+        border-radius: 0.5rem !important;
+        font-size: 0.8125rem !important;
+        font-weight: 500;
+        color: #374151 !important;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate .previous,
+    #tabel-galeri_wrapper .dataTables_paginate .next {
+        border: 1px solid #e5e7eb !important;
+        background: #fff !important;
+        margin: 0 0.125rem;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate .previous:hover:not(.disabled),
+    #tabel-galeri_wrapper .dataTables_paginate .next:hover:not(.disabled) {
+        border-color: #38bdf8 !important;
+        color: #0284c7 !important;
+        background: #f0f9ff !important;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate .previous.disabled,
+    #tabel-galeri_wrapper .dataTables_paginate .next.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate .paginate_button:not(.previous):not(.next):hover:not(.current) {
+        background: #f0f9ff !important;
+        color: #0284c7 !important;
+        border-color: #bae6fd !important;
+    }
+    #tabel-galeri_wrapper .dataTables_paginate .paginate_button.current,
+    #tabel-galeri_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background: #0ea5e9 !important;
+        color: #fff !important;
+        border-color: #0ea5e9 !important;
+        box-shadow: 0 1px 3px rgba(14, 165, 233, 0.35);
+    }
+</style>
+@endpush
+
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
     let deleteUrl = null;
@@ -135,8 +254,15 @@
             pageLength: 10,
             lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
             language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
-            }
+                search: '',
+                searchPlaceholder: 'Cari galeri...',
+                lengthMenu: 'Tampilkan _MENU_ data',
+                info: 'Menampilkan _START_ – _END_ dari _TOTAL_ galeri',
+                infoEmpty: 'Tidak ada data',
+                paginate: { previous: '‹', next: '›' },
+                processing: '<div class="text-sky-500 text-sm py-4">Memuat data...</div>',
+            },
+            dom: '<"flex items-center justify-between mb-4 flex-wrap gap-3"lf>rtip',
         });
     });
 </script>
