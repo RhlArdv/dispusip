@@ -18,7 +18,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Alpine.js for interactive components -->
+
+    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
@@ -42,7 +43,7 @@
                         'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'marquee': 'marquee 35s linear infinite',
+                        'marquee': 'marquee 25s linear infinite',
                     },
                     keyframes: {
                         fadeInUp: {
@@ -67,30 +68,6 @@
             background-color: #f8fafc;
             color: #0f2440;
             overflow-x: hidden;
-        }
-
-        .delay-100 {
-            animation-delay: 100ms;
-        }
-
-        .delay-200 {
-            animation-delay: 200ms;
-        }
-
-        .delay-300 {
-            animation-delay: 300ms;
-        }
-
-        .delay-400 {
-            animation-delay: 400ms;
-        }
-
-        .bento-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 10px 40px rgba(15, 36, 64, 0.05);
         }
 
         .bg-grid {
@@ -127,49 +104,153 @@
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-3 cursor-pointer group">
                 <img src="{{ asset('assets/img/logo.png') }}" alt="Logo DISPUSIP" class="h-10 w-auto object-contain">
-                <span class="font-black text-xl tracking-tight text-navy-900">PERPUSTAKAAN UMUM DAERAH KOTA
-                    PADANG</span>
+                <span class="font-black text-xl tracking-tight text-navy-900 hidden sm:block">PERPUSTAKAAN UMUM
+                    DAERAH</span>
             </a>
 
             <!-- Links -->
             <div class="hidden md:flex items-center gap-8 text-sm font-bold text-navy-800">
-                <!-- <a href="{{ url('/') }}" class="hover:text-gold-500 transition-colors">Portal Utama</a> -->
-                <a href="{{ route('eperpus.index') }}" class="hover:text-gold-500 transition-colors">Beranda
+                <a href="{{ route('eperpus.index') }}"
+                    class="{{ request()->routeIs('eperpus.index') ? 'text-gold-500' : 'hover:text-gold-500 transition-colors' }}">Beranda
                     E-Perpus</a>
                 <a href="{{ route('eperpus.profil') }}"
                     class="{{ request()->routeIs('eperpus.profil') ? 'text-gold-500' : 'hover:text-gold-500 transition-colors' }}">Profil
                     E-Perpus</a>
-                <a href="{{ route('public.layanan') }}" target="_blank"
-                    class="hover:text-gold-500 transition-colors">Layanan</a>
+                <a href="{{ route('public.layanan') }}"
+                    class="{{ request()->routeIs('public.layanan') ? 'text-gold-500' : 'hover:text-gold-500 transition-colors' }}">Layanan</a>
                 <a href="{{ route('public.aktivitas.index') }}"
-                    class="hover:text-gold-500 transition-colors">Aktivitas</a>
-                <a href="{{ route('public.rekomendasi') }}" target="_blank"
-                    class="hover:text-gold-500 transition-colors">Rekomendasi</a>
+                    class="{{ request()->routeIs('public.aktivitas.*') ? 'text-gold-500' : 'hover:text-gold-500 transition-colors' }}">Aktivitas</a>
+                <a href="{{ route('public.rekomendasi') }}"
+                    class="{{ request()->routeIs('public.rekomendasi') ? 'text-gold-500' : 'hover:text-gold-500 transition-colors' }}">Rekomendasi</a>
             </div>
-
-            <!-- Actions -->
-            <!-- <div class="flex items-center gap-4">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}"
-                            class="bg-navy-900 text-white px-6 py-2.5 rounded text-sm font-bold hover:bg-navy-800 transition-all shadow-md">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="text-sm font-bold text-navy-800 hover:text-gold-600 hidden sm:block">Masuk</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                                class="bg-gold-400 text-navy-900 px-6 py-2.5 rounded text-sm font-bold hover:bg-gold-500 transition-all shadow-md transform hover:-translate-y-0.5">Daftar</a>
-                        @endif
-                    @endauth
-                @endif
-            </div> -->
         </div>
     </nav>
 
+    <!-- GLOBAL HERO CAROUSEL INFOGRAFIS (TETAP FULL WIDTH, TAPI MURNI GAMBAR) -->
+    <div class="relative w-full {{ request()->routeIs('eperpus.index') ? 'h-[60vh] md:h-[80vh]' : 'h-[35vh] md:h-[50vh]' }} bg-navy-950 overflow-hidden mt-20 group"
+        x-data="{
+                        activeSlide: 0,
+                        slides: {{ isset($infografis) && $infografis->count() > 0 ? $infografis->count() : 1 }},
+                        autoPlay() {
+                            setInterval(() => {
+                                this.activeSlide = this.activeSlide === this.slides - 1 ? 0 : this.activeSlide + 1
+                            }, 5000)
+                        }
+                    }" x-init="autoPlay()">
+
+        @if(isset($infografis) && $infografis->count() > 0)
+            @foreach($infografis as $index => $info)
+                <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out bg-navy-950"
+                    x-show="activeSlide === {{ $index }}" x-transition:enter="transition-opacity duration-1000"
+                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition-opacity duration-1000" x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0">
+
+                    <!-- Background fill (blur) -->
+                    <img src="{{ Storage::url($info->image) }}"
+                        class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" alt="">
+
+                    <!-- Gambar Murni tanpa overlay teks di atasnya -->
+                    <img src="{{ Storage::url($info->image) }}" alt="{{ $info->title }}"
+                        class="relative w-full h-full object-contain">
+                </div>
+            @endforeach
+        @else
+            <!-- Placeholder -->
+            <div class="absolute inset-0 flex items-center justify-center bg-navy-900">
+                <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=1920"
+                    class="w-full h-full object-cover opacity-40">
+            </div>
+        @endif
+
+        <!-- Controls Slider -->
+        @if(isset($infografis) && $infografis->count() > 1)
+            <button @click="activeSlide = activeSlide === 0 ? slides - 1 : activeSlide - 1"
+                class="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 rounded-full bg-navy-900/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-gold-500 hover:text-navy-900 transition-all duration-300 z-30 shadow-lg sm:opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0">
+                <svg class="w-5 h-5 md:w-6 md:h-6 ml-[-2px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button @click="activeSlide = activeSlide === slides - 1 ? 0 : activeSlide + 1"
+                class="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 rounded-full bg-navy-900/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-gold-500 hover:text-navy-900 transition-all duration-300 z-30 shadow-lg sm:opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0">
+                <svg class="w-5 h-5 md:w-6 md:h-6 mr-[-2px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        @endif
+    </div>
+
+    <!-- KHUSUS HALAMAN SUB-PAGES (SEPERTI PROFIL, REKOMENDASI, DLL) -->
+    @if(!request()->routeIs('eperpus.index'))
+
+        <!-- PITA TEKS BERJALAN (GEN-Z AESTHETIC MARQUEE) -->
+        <div
+            class="relative w-full bg-gold-400 border-y-[3px] border-navy-950 overflow-hidden flex items-center py-2.5 z-20 shadow-md">
+            <div
+                class="animate-marquee whitespace-nowrap flex items-center gap-6 text-navy-900 font-black text-xs md:text-sm uppercase tracking-[0.2em] px-4">
+                <span>📖 E-PERPUS KOTA PADANG</span><span>&bull;</span>
+                <span>LITERASI DIGITAL</span><span>&bull;</span>
+                <span>📖 E-PERPUS KOTA PADANG</span><span>&bull;</span>
+                <span>LITERASI DIGITAL</span><span>&bull;</span>
+                <span>📖 E-PERPUS KOTA PADANG</span><span>&bull;</span>
+                <span>LITERASI DIGITAL</span><span>&bull;</span>
+                <span>📖 E-PERPUS KOTA PADANG</span><span>&bull;</span>
+                <span>LITERASI DIGITAL</span><span>&bull;</span>
+                <span>📖 E-PERPUS KOTA PADANG</span><span>&bull;</span>
+                <span>LITERASI DIGITAL</span><span>&bull;</span>
+                <span>📖 E-PERPUS KOTA PADANG</span><span>&bull;</span>
+                <span>LITERASI DIGITAL</span><span>&bull;</span>
+            </div>
+        </div>
+
+        <!-- DEDICATED TITLE SECTION (TERPISAH DARI GAMBAR) -->
+        <div class="relative bg-navy-900 py-10 md:py-16 px-6 overflow-hidden border-b border-navy-800">
+            <!-- Background Textures -->
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5">
+            </div>
+            <div
+                class="absolute top-0 right-0 w-[400px] h-[400px] bg-gold-500/10 rounded-full blur-[100px] translate-x-1/3 -translate-y-1/2 pointer-events-none">
+            </div>
+
+            <div
+                class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center md:items-end justify-between gap-8 text-center md:text-left">
+                <div class="flex-1">
+                    <span
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-gold-400 text-[10px] sm:text-xs font-black tracking-widest uppercase mb-6 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
+                        @yield('hero_badge', 'Informasi Halaman')
+                    </span>
+
+                    <div class="max-w-4xl">
+                        <!-- Teks Judul dipanggil dari masing-masing halaman -->
+                        @hasSection('hero_title')
+                            @yield('hero_title')
+                        @else
+                            <h1
+                                class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.1]">
+                                Jelajahi Dunia <br>
+                                <span
+                                    class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 to-gold-500">E-Perpus</span>
+                            </h1>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Ornamen Garis Scroll (Opsional untuk estetika) -->
+                <div class="hidden md:flex flex-col items-center gap-3 text-navy-400">
+                    <span
+                        class="text-[10px] font-bold tracking-[0.2em] uppercase origin-left rotate-90 mb-8 mr-2">Eksplorasi</span>
+                    <div class="w-px h-16 bg-gradient-to-b from-navy-400 to-transparent"></div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- MAIN CONTENT YIELD -->
     @yield('content')
 
     <!-- Massive Footer (Hyper-Modern) -->
-    <footer class="bg-navy-950 pt-24 px-6 overflow-hidden relative">
+    <footer class="bg-navy-950 pt-24 px-6 overflow-hidden relative border-t border-navy-900">
         <div
             class="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/10 rounded-full blur-[100px] translate-x-1/3 -translate-y-1/2">
         </div>
@@ -185,20 +266,6 @@
                     </div>
                     <p class="text-navy-200/80 text-sm leading-relaxed mb-8 max-w-sm">Membangun masyarakat sadar
                         informasi dan melek literasi untuk kemajuan daerah.</p>
-                    <div class="flex gap-4">
-                        <a href="#"
-                            class="w-10 h-10 rounded-full border border-navy-800 flex items-center justify-center text-white hover:bg-gold-500 hover:border-gold-500 hover:text-navy-900 transition-all"><svg
-                                class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-                            </svg></a>
-                        <a href="#"
-                            class="w-10 h-10 rounded-full border border-navy-800 flex items-center justify-center text-white hover:bg-gold-500 hover:border-gold-500 hover:text-navy-900 transition-all"><svg
-                                class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                            </svg></a>
-                    </div>
                 </div>
 
                 <div class="col-span-1 md:col-span-2 md:col-start-7">
@@ -206,8 +273,7 @@
                     <ul class="space-y-4 text-sm text-navy-300">
                         <li><a href="#" class="hover:text-gold-400 transition-colors">Katalog (OPAC)</a></li>
                         <li><a href="{{ route('public.arsip.index') }}"
-                                class="hover:text-gold-400 transition-colors">SIKN</a>
-                        </li>
+                                class="hover:text-gold-400 transition-colors">SIKN</a></li>
                         <li><a href="#" class="hover:text-gold-400 transition-colors">Aplikasi Srikandi</a></li>
                     </ul>
                 </div>
@@ -254,7 +320,6 @@
     <div class="md:hidden fixed bottom-4 inset-x-0 mx-auto w-[95%] max-w-[420px] z-50 animate-fade-in-up delay-300">
         <div
             class="bg-white/90 backdrop-blur-xl border border-gray-200 shadow-[0_10px_40px_rgba(0,0,0,0.1)] rounded-full p-1.5 flex justify-between items-center">
-            <!-- Beranda -->
             <a href="{{ route('eperpus.index') }}"
                 class="flex flex-col items-center justify-center w-12 h-11 rounded-full {{ request()->routeIs('eperpus.index') ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:text-navy-900 hover:bg-gray-50' }} transition-all active:scale-95">
                 <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -263,7 +328,6 @@
                 </svg>
                 <span class="text-[8px] font-bold tracking-wide">Beranda</span>
             </a>
-            <!-- Profil -->
             <a href="{{ route('eperpus.profil') }}"
                 class="flex flex-col items-center justify-center w-12 h-11 rounded-full {{ request()->routeIs('eperpus.profil') ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:text-navy-900 hover:bg-gray-50' }} transition-all active:scale-95">
                 <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -272,16 +336,14 @@
                 </svg>
                 <span class="text-[8px] font-bold tracking-wide">Profil</span>
             </a>
-            <!-- Layanan -->
-            <a href="#"
-                class="flex flex-col items-center justify-center w-12 h-11 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-50 transition-all active:scale-95">
+            <a href="{{ route('public.layanan') }}"
+                class="flex flex-col items-center justify-center w-12 h-11 rounded-full {{ request()->routeIs('public.layanan') ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:text-navy-900 hover:bg-gray-50' }} transition-all active:scale-95">
                 <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
                 <span class="text-[8px] font-bold tracking-wide">Layanan</span>
             </a>
-            <!-- Aktivitas -->
             <a href="{{ route('public.aktivitas.index') }}"
                 class="flex flex-col items-center justify-center w-12 h-11 rounded-full {{ request()->routeIs('public.aktivitas.*') ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:text-navy-900 hover:bg-gray-50' }} transition-all active:scale-95">
                 <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -290,7 +352,6 @@
                 </svg>
                 <span class="text-[8px] font-bold tracking-wide">Aktivitas</span>
             </a>
-            <!-- Akun / Login -->
             @auth
                 <a href="{{ url('/dashboard') }}"
                     class="flex flex-col items-center justify-center w-12 h-11 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-50 transition-all active:scale-95">

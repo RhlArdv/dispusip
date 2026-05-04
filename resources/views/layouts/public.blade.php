@@ -194,10 +194,9 @@
                 <div class="col-span-1 md:col-span-2 md:col-start-7">
                     <h4 class="font-bold text-white mb-6 uppercase text-sm tracking-widest">Layanan</h4>
                     <ul class="space-y-4 text-sm text-navy-300">
-                        <li><a href="#" class="hover:text-gold-400 transition-colors">Katalog (OPAC)</a></li>
+                        <li><a href="https://inlislite.pdg.web.id/opac" class="hover:text-gold-400 transition-colors">Katalog (OPAC)</a></li>
                         <li><a href="{{ route('public.arsip.index') }}" class="hover:text-gold-400 transition-colors">SIKN</a>
                         </li>
-                        <li><a href="#" class="hover:text-gold-400 transition-colors">Aplikasi Srikandi</a></li>
                     </ul>
                 </div>
 

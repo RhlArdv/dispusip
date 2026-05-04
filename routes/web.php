@@ -3,6 +3,10 @@
 use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\PublicGaleriController;
+use App\Http\Controllers\PublicVideoController;
 use App\Http\Controllers\JdihController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KoleksiController;
@@ -194,6 +198,12 @@ Route::get('/berita/{slug}', [\App\Http\Controllers\PublicBeritaController::clas
 Route::get('/kegiatan', [\App\Http\Controllers\PublicKegiatanController::class, 'index'])->name('public.kegiatan.index');
 Route::get('/kegiatan/{slug}', [\App\Http\Controllers\PublicKegiatanController::class, 'show'])->name('public.kegiatan.show');
 
+Route::get('/galeri', [PublicGaleriController::class, 'index'])->name('public.galeri.index');
+Route::get('/galeri/{slug}', [PublicGaleriController::class, 'show'])->name('public.galeri.show');
+
+Route::get('/video', [PublicVideoController::class, 'index'])->name('public.video.index');
+Route::get('/video/{slug}', [PublicVideoController::class, 'show'])->name('public.video.show');
+
 Route::get('/arsip', [\App\Http\Controllers\PublicArsipController::class, 'index'])->name('public.arsip.index');
 
 Route::get('/koleksi/{slug}', [\App\Http\Controllers\PublicKoleksiController::class, 'show'])->name('public.koleksi.show');
@@ -279,6 +289,14 @@ Route::middleware('auth')->group(function () {
         // Testimoni Management
         Route::resource('testimoni', \App\Http\Controllers\TestimoniController::class)
             ->middleware(['permission:view_testimoni']);
+
+        // Galeri Management
+        Route::resource('galeri', GaleriController::class)
+            ->middleware(['permission:view_galeri']);
+
+        // Video Management
+        Route::resource('video', VideoController::class)
+            ->middleware(['permission:view_video']);
 
         // Agenda Management
         Route::resource('agenda', \App\Http\Controllers\AgendaController::class)

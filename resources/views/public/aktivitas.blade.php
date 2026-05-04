@@ -204,26 +204,14 @@
     </style>
 @endpush
 
-@section('content')
+@section('hero_title')
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.1]">
+        Aktivitas <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Dinas</span>
+    </h1>
+@endsection
 
-    <!-- HERO SECTION -->
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 bg-navy-900 overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-navy-900/50 to-navy-950"></div>
-        <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
-            <span
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-gold-400 text-xs font-black tracking-widest uppercase mb-8 shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span> E-Perpus Padang
-            </span>
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.1] mb-6">
-                Aktivitas <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 to-gold-500">Dinas</span>
-            </h1>
-            <p class="text-lg md:text-xl text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
-                Pantau seluruh berita terkini, agenda kegiatan, serta ulasan dari masyarakat tentang pelayanan kami.
-            </p>
-        </div>
-    </section>
+@section('content')
 
     <!-- KALENDER AGENDA SECTION -->
     <section class="py-24 relative overflow-hidden border-b border-navy-50 bg-[#F8FAFC]" id="agenda">

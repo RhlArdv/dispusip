@@ -112,6 +112,18 @@ class PermissionSeeder extends Seeder
             ['key' => 'edit_link_access', 'display_name' => 'Edit Link Access', 'group' => 'Link Access', 'description' => 'Mengedit link access'],
             ['key' => 'delete_link_access', 'display_name' => 'Delete Link Access', 'group' => 'Link Access', 'description' => 'Menghapus link access'],
 
+            // Galeri
+            ['key' => 'view_galeri', 'display_name' => 'View Galeri', 'group' => 'Galeri', 'description' => 'Melihat daftar galeri'],
+            ['key' => 'create_galeri', 'display_name' => 'Create Galeri', 'group' => 'Galeri', 'description' => 'Membuat galeri baru'],
+            ['key' => 'edit_galeri', 'display_name' => 'Edit Galeri', 'group' => 'Galeri', 'description' => 'Mengedit galeri'],
+            ['key' => 'delete_galeri', 'display_name' => 'Delete Galeri', 'group' => 'Galeri', 'description' => 'Menghapus galeri'],
+
+            // Video
+            ['key' => 'view_video', 'display_name' => 'View Video', 'group' => 'Video', 'description' => 'Melihat daftar video'],
+            ['key' => 'create_video', 'display_name' => 'Create Video', 'group' => 'Video', 'description' => 'Membuat video baru'],
+            ['key' => 'edit_video', 'display_name' => 'Edit Video', 'group' => 'Video', 'description' => 'Mengedit video'],
+            ['key' => 'delete_video', 'display_name' => 'Delete Video', 'group' => 'Video', 'description' => 'Menghapus video'],
+
             // Tickets
             ['key' => 'view_tickets', 'display_name' => 'View Tickets', 'group' => 'Tickets', 'description' => 'Melihat daftar tickets'],
             ['key' => 'edit_tickets', 'display_name' => 'Edit Tickets', 'group' => 'Tickets', 'description' => 'Mengedit status tickets'],
@@ -182,6 +194,8 @@ class PermissionSeeder extends Seeder
             'view_kegiatan', 'create_kegiatan', 'edit_kegiatan', 'delete_kegiatan',
             'view_kategori_buku', 'create_kategori_buku', 'edit_kategori_buku', 'delete_kategori_buku',
             'view_buku', 'create_buku', 'edit_buku', 'delete_buku',
+            'view_galeri', 'create_galeri', 'edit_galeri', 'delete_galeri',
+            'view_video', 'create_video', 'edit_video', 'delete_video',
         ];
 
         foreach ($pustakaPermissions as $key) {

@@ -2,56 +2,15 @@
 
 @section('title', 'Rekomendasi Pilihan | E-Perpus DISPUSIP')
 
+@section('hero_title')
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.1]">
+        Rekomendasi <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Pilihan</span>
+    </h1>
+@endsection
+
 @section('content')
     <div class="min-h-screen bg-slate-50 relative pb-20">
-
-        {{-- 1. HERO SECTION (With Background Image) --}}
-        <main
-            class="relative z-10 pt-40 pb-32 px-6 flex items-center overflow-hidden min-h-[60vh] bg-navy-900 bg-[url('https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center bg-no-repeat bg-fixed">
-            <!-- Dark Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-b from-navy-900/95 via-navy-900/80 to-navy-900 z-0"></div>
-
-            <!-- Abstract Glows -->
-            <div class="absolute inset-0 bg-grid opacity-20 z-0"></div>
-            <div
-                class="absolute top-0 right-0 w-[800px] h-[800px] bg-gold-500/20 rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-pulse-slow translate-x-1/3 -translate-y-1/4 z-0">
-            </div>
-            <div
-                class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-sky-500/20 rounded-full mix-blend-screen filter blur-[100px] opacity-60 translate-y-1/3 -translate-x-1/4 z-0">
-            </div>
-
-            <div class="max-w-7xl mx-auto w-full relative z-10 text-center flex flex-col items-center">
-                <div
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md mb-8 shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-gold-500 animate-ping"></span>
-                    <span class="text-xs font-black tracking-widest text-gold-400 uppercase">E-Perpus DISPUSIP Kota
-                        Padang</span>
-                </div>
-
-                <h1
-                    class="text-5xl md:text-7xl lg:text-[6rem] font-black text-white tracking-tighter uppercase leading-[0.9] mb-8">
-                    Rekomendasi<br>
-                    <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 drop-shadow-sm">Pilihan</span><br>
-                    <div class="flex items-center justify-center gap-4 mt-2">
-                        <span class="text-sky-400 italic font-serif lowercase text-5xl md:text-7xl">kami</span>
-                    </div>
-                </h1>
-
-                <p class="text-navy-100 text-lg md:text-xl font-medium max-w-3xl mx-auto leading-relaxed mt-4 text-shadow">
-                    Jelajahi pilihan buku dan koleksi literatur digital terbaik yang telah kami kurasi khusus untuk Anda.
-                </p>
-
-                <!-- Scroll Indicator -->
-                <a href="#rekomendasi-buku"
-                    class="mt-16 animate-bounce flex items-center justify-center w-14 h-14 rounded-full border-2 border-white/20 text-white/50 hover:text-gold-400 hover:border-gold-400 hover:bg-white/5 transition-all">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                    </svg>
-                </a>
-            </div>
-        </main>
 
         {{-- SECTION: REKOMENDASI BUKU --}}
         <section id="rekomendasi-buku" class="py-24 px-6 bg-white relative">
