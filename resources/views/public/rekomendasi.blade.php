@@ -3,9 +3,9 @@
 @section('title', 'Rekomendasi Pilihan | E-Perpus DISPUSIP')
 
 @section('hero_title')
-    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.1]">
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-navy-900 tracking-tight uppercase leading-[1.1]">
         Rekomendasi <br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Pilihan</span>
+        <span class="text-transparent" style="-webkit-text-stroke: 1.5px #0f2440;">Pilihan</span>
     </h1>
 @endsection
 
@@ -145,11 +145,8 @@
         </section>
 
         {{-- KOLEKSI PER KATEGORI --}}
-        @if(isset($koleksiPerKategori) && $koleksiPerKategori->isNotEmpty())
-            <section class="py-24 bg-[#F8FAFC] border-t border-navy-50 relative" id="koleksi-kategori" x-data="{
-                                    activeTab: '{{ $koleksiPerKategori->keys()->first() }}',
-                                    tabs: {{ json_encode($koleksiPerKategori->keys()->values()->all()) }}
-                                }">
+        @if(isset($koleksi) && $koleksi->isNotEmpty() || isset($selectedCategory))
+            <section class="py-24 bg-[#F8FAFC] border-t border-navy-50 relative" id="koleksi-kategori">
                 <div class="max-w-7xl mx-auto px-6">
 
                     {{-- Header --}}
@@ -170,110 +167,104 @@
                         </p>
                     </div>
 
-                    {{-- Tab Pills --}}
+                    {{-- Tab Pills (Links instead of Alpine buttons) --}}
                     <div class="flex flex-nowrap md:flex-wrap gap-3 mb-12 overflow-x-auto pb-4 scrollbar-hide">
-                        @foreach($koleksiPerKategori as $kategori => $items)
-                            <button @click="activeTab = '{{ $kategori }}'"
-                                :class="activeTab === '{{ $kategori }}'
-                                                        ? 'bg-navy-900 text-white shadow-[0_8px_16px_rgba(15,36,64,0.2)] border-navy-900'
-                                                        : 'bg-white text-navy-600 border-navy-100 hover:border-gold-400 hover:text-gold-600 hover:bg-gold-50'"
-                                class="px-6 py-3 border rounded-full font-bold text-sm transition-all duration-300 flex items-center gap-3 whitespace-nowrap">
-                                <span>{{ $kategori }}</span>
-                                <span
-                                    :class="activeTab === '{{ $kategori }}' ? 'bg-gold-500 text-navy-900' : 'bg-navy-50 text-navy-400'"
-                                    class="text-[11px] font-black px-2.5 py-0.5 rounded-full transition-colors">
-                                    {{ $items->count() }}
-                                </span>
-                            </button>
+                        {{-- Tab "Semua" --}}
+                        <a href="{{ route('public.rekomendasi') }}#koleksi-kategori"
+                            class="{{ !$selectedCategory ? 'bg-navy-900 text-white shadow-[0_8px_16px_rgba(15,36,64,0.2)] border-navy-900' : 'bg-white text-navy-600 border-navy-100 hover:border-gold-400 hover:text-gold-600 hover:bg-gold-50' }} px-6 py-3 border rounded-full font-bold text-sm transition-all duration-300 flex items-center gap-3 whitespace-nowrap">
+                            <span>Semua</span>
+                        </a>
+
+                        @foreach($categories as $cat)
+                            <a href="{{ route('public.rekomendasi', ['category' => $cat['key']]) }}#koleksi-kategori"
+                                class="{{ $selectedCategory == $cat['key'] ? 'bg-navy-900 text-white shadow-[0_8px_16px_rgba(15,36,64,0.2)] border-navy-900' : 'bg-white text-navy-600 border-navy-100 hover:border-gold-400 hover:text-gold-600 hover:bg-gold-50' }} px-6 py-3 border rounded-full font-bold text-sm transition-all duration-300 flex items-center gap-3 whitespace-nowrap">
+                                <span>{{ $cat['name'] }}</span>
+                            </a>
                         @endforeach
                     </div>
 
-                    {{-- Content per Kategori --}}
-                    @foreach($koleksiPerKategori as $kategori => $items)
-                        <div x-show="activeTab === '{{ $kategori }}'" x-transition:enter="transition ease-out duration-500"
-                            x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-300"
-                            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-8"
-                            style="display: none;">
+                    {{-- Content Grid --}}
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 lg:gap-6 mb-12">
+                        @forelse($koleksi as $item)
+                            <a href="{{ $item->slug ? route('public.koleksi.show', $item->slug) : '#' }}"
+                                class="group bg-white rounded-[2rem] overflow-hidden border border-navy-50 hover:border-gold-300 hover:shadow-[0_20px_40px_rgba(15,36,64,0.08)] transition-all duration-500 flex flex-col hover:-translate-y-1"
+                                style="animation: fadeInUp 0.8s ease-out forwards; animation-delay: {{ $loop->index * 50 }}ms; opacity: 0;">
 
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 lg:gap-6">
-                                @foreach($items as $koleksi)
-                                    <a href="{{ $koleksi->slug ? route('public.koleksi.show', $koleksi->slug) : '#' }}"
-                                        class="group bg-white rounded-[2rem] overflow-hidden border border-navy-50 hover:border-gold-300 hover:shadow-[0_20px_40px_rgba(15,36,64,0.08)] transition-all duration-500 flex flex-col hover:-translate-y-1">
-
-                                        {{-- Cover --}}
-                                        <div class="relative w-full bg-navy-50 overflow-hidden flex-shrink-0"
-                                            style="padding-bottom: 133.33%;">
-                                            @if($koleksi->cover_image)
-                                                <img src="{{ $koleksi->cover_image }}" alt="{{ $koleksi->judul_koleksi }}" loading="lazy"
-                                                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
-                                            @else
-                                                <div
-                                                    class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-navy-50 to-navy-100">
-                                                    <div
-                                                        class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-navy-300 shadow-sm">
-                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            @endif
-
-                                            {{-- Category Badge Overlay --}}
-                                            <div class="absolute top-4 left-4">
-                                                <span
-                                                    class="bg-gold-500/90 backdrop-blur-md text-navy-900 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
-                                                    {{ $kategori }}
-                                                </span>
-                                            </div>
-
-                                            {{-- Hover overlay --}}
+                                {{-- Cover --}}
+                                <div class="relative w-full bg-navy-50 overflow-hidden flex-shrink-0"
+                                    style="padding-bottom: 133.33%;">
+                                    @if($item->cover_image)
+                                        <img src="{{ $item->cover_image }}" alt="{{ $item->judul_koleksi }}" loading="lazy"
+                                            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                                    @else
+                                        <div
+                                            class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-navy-50 to-navy-100">
                                             <div
-                                                class="absolute inset-0 bg-navy-900/0 group-hover:bg-navy-900/30 transition-colors duration-500 flex items-center justify-center">
-                                                @if($koleksi->link)
-                                                    <div
-                                                        class="opacity-0 group-hover:opacity-100 transition-all duration-300 w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-xl transform scale-50 group-hover:scale-100">
-                                                        <svg class="w-6 h-6 text-gold-500 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                                                        </svg>
-                                                    </div>
-                                                @endif
+                                                class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-navy-300 shadow-sm">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
                                             </div>
                                         </div>
+                                    @endif
 
-                                        {{-- Info --}}
-                                        <div class="p-5 flex-1 flex flex-col justify-between bg-white">
-                                            <h3
-                                                class="text-sm md:text-base font-black text-navy-900 line-clamp-2 leading-snug group-hover:text-gold-600 transition-colors mb-2">
-                                                {{ $koleksi->judul_koleksi }}
-                                            </h3>
-                                            @if($koleksi->isi_koleksi)
-                                                <p class="text-xs text-navy-500 line-clamp-2 leading-relaxed">
-                                                    {{ Str::limit(strip_tags($koleksi->isi_koleksi), 60) }}
-                                                </p>
-                                            @endif
-                                        </div>
-                                    </a>
-                                @endforeach
-                            </div>
-
-                            {{-- Empty state per kategori --}}
-                            @if($items->isEmpty())
-                                <div class="text-center py-20 bg-white rounded-[3rem] border border-navy-50">
-                                    <div class="w-16 h-16 bg-navy-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <svg class="w-8 h-8 text-navy-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                        </svg>
+                                    {{-- Category Badge Overlay --}}
+                                    <div class="absolute top-4 left-4">
+                                        <span
+                                            class="bg-gold-500/90 backdrop-blur-md text-navy-900 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+                                            {{ $item->kategori_nama }}
+                                        </span>
                                     </div>
-                                    <p class="font-bold text-navy-900">Belum Ada Koleksi</p>
-                                    <p class="text-sm text-navy-500 mt-1">Koleksi untuk kategori ini belum tersedia.</p>
+
+                                    {{-- Hover overlay --}}
+                                    <div
+                                        class="absolute inset-0 bg-navy-900/0 group-hover:bg-navy-900/30 transition-colors duration-500 flex items-center justify-center">
+                                        @if($item->link)
+                                            <div
+                                                class="opacity-0 group-hover:opacity-100 transition-all duration-300 w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-xl transform scale-50 group-hover:scale-100">
+                                                <svg class="w-6 h-6 text-gold-500 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            @endif
+
+                                {{-- Info --}}
+                                <div class="p-5 flex-1 flex flex-col justify-between bg-white">
+                                    <h3
+                                        class="text-sm md:text-base font-black text-navy-900 line-clamp-2 leading-snug group-hover:text-gold-600 transition-colors mb-2">
+                                        {{ $item->judul_koleksi }}
+                                    </h3>
+                                    @if($item->isi_koleksi)
+                                        <p class="text-xs text-navy-500 line-clamp-2 leading-relaxed">
+                                            {{ Str::limit(strip_tags($item->isi_koleksi), 60) }}
+                                        </p>
+                                    @endif
+                                </div>
+                            </a>
+                        @empty
+                            <div class="col-span-full text-center py-20 bg-white rounded-[3rem] border border-navy-50">
+                                <div class="w-16 h-16 bg-navy-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-navy-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                </div>
+                                <p class="font-bold text-navy-900">Belum Ada Koleksi</p>
+                                <p class="text-sm text-navy-500 mt-1">Koleksi untuk kategori ini belum tersedia.</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    {{-- Pagination Links --}}
+                    @if($koleksi->hasPages())
+                        <div class="flex justify-center mt-12">
+                            {{ $koleksi->fragment('koleksi-kategori')->links('partials.pagination') }}
                         </div>
-                    @endforeach
+                    @endif
 
                 </div>
             </section>

@@ -3,9 +3,9 @@
 @section('title', 'Profil Perpustakaan | E-Perpus DISPUSIP')
 
 @section('hero_title')
-    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.1]">
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-navy-900 tracking-tight uppercase leading-[1.1]">
         Profil <br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Perpustakaan</span>
+        <span class="text-transparent" style="-webkit-text-stroke: 1.5px #0f2440;">Perpustakaan</span>
     </h1>
 @endsection
 

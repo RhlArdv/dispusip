@@ -205,9 +205,9 @@
 @endpush
 
 @section('hero_title')
-    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase leading-[1.1]">
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-navy-900 tracking-tight uppercase leading-[1.1]">
         Aktivitas <br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Dinas</span>
+        <span class="text-transparent" style="-webkit-text-stroke: 1.5px #0f2440;">Dinas</span>
     </h1>
 @endsection
 

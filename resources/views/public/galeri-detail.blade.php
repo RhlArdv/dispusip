@@ -1,134 +1,95 @@
 @extends('layouts.eperpus')
 
-@section('title', $galeri->judul_galeri . ' | E-Perpus DISPUSIP')
+@section('title', $galeri->judul_galeri . ' | Galeri DISPUSIP')
+
+@section('hero_title')
+    <h1 class="text-4xl md:text-6xl font-black text-navy-900 tracking-tighter uppercase leading-tight max-w-4xl">
+        {{ $galeri->judul_galeri }}
+    </h1>
+@endsection
+
+@section('hero_badge')
+    <span class="text-gold-600 font-bold">Dokumentasi Kegiatan</span>
+@endsection
 
 @section('content')
-<div class="min-h-screen bg-white">
-    {{-- Breadcrumb --}}
-    <nav class="py-4 px-6 border-b border-gray-200 bg-white sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto">
-            <ol class="flex items-center gap-2 text-sm">
-                <li>
-                    <a href="{{ route('home') }}" class="text-gray-500 hover:text-gray-700 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                        </svg>
-                    </a>
-                </li>
-                <li><span class="text-gray-400">/</span></li>
-                <li>
-                    <a href="{{ route('public.galeri.index') }}" class="text-gray-500 hover:text-gray-700 transition-colors">Galeri</a>
-                </li>
-                <li><span class="text-gray-400">/</span></li>
-                <li class="text-gray-900 font-medium truncate max-w-xs">{{ $galeri->judul_galeri }}</li>
-            </ol>
-        </div>
-    </nav>
-
-    {{-- Main Content --}}
-    <article class="py-12 px-6">
-        <div class="max-w-5xl mx-auto">
-            {{-- Hero Image --}}
-            @if($galeri->foto_galeri)
-                <div class="aspect-[16/9] rounded-[2.5rem] overflow-hidden mb-8 shadow-2xl">
-                    <img src="{{ asset($galeri->foto_galeri) }}"
-                         alt="{{ $galeri->judul_galeri }}"
-                         class="w-full h-full object-cover">
-                </div>
-            @endif
-
-            {{-- Content --}}
-            <div class="text-center mb-8">
-                <h1 class="text-4xl md:text-5xl font-black text-navy-900 mb-6 leading-tight">
-                    {{ $galeri->judul_galeri }}
-                </h1>
-
-                @if($galeri->deskripsi)
-                    <div class="max-w-3xl mx-auto">
-                        <p class="text-lg text-gray-600 leading-relaxed">
-                            {{ $galeri->deskripsi }}
-                        </p>
+<div class="min-h-screen bg-white pb-32">
+    <div class="max-w-7xl mx-auto px-6">
+        {{-- Main Feature Image --}}
+        <div class="relative -mt-10 mb-20 animate-fade-in-up">
+            <div class="aspect-[16/9] md:aspect-[21/9] rounded-[3rem] overflow-hidden shadow-[0_40px_100px_rgba(15,36,64,0.2)] border-8 border-white bg-navy-50">
+                <img src="{{ asset($galeri->foto_galeri) }}" 
+                     alt="{{ $galeri->judul_galeri }}"
+                     class="w-full h-full object-cover">
+            </div>
+            
+            {{-- Floating Info Card --}}
+            <div class="absolute -bottom-10 right-10 hidden md:block">
+                <div class="bg-white/90 backdrop-blur-2xl p-8 rounded-[2rem] shadow-2xl border border-navy-50 max-w-xs">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-2xl bg-gold-500 flex items-center justify-center text-navy-900">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-navy-400 uppercase tracking-widest">Tanggal</p>
+                            <p class="font-bold text-navy-900">{{ $galeri->created_at->format('d M Y') }}</p>
+                        </div>
                     </div>
-                @endif
+                </div>
+            </div>
+        </div>
 
-                {{-- Date Info --}}
-                <div class="flex items-center justify-center gap-2 mt-6 text-sm text-gray-500">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span>{{ $galeri->created_at->format('d M Y') }}</span>
+        {{-- Content Grid --}}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32">
+            {{-- Main Description --}}
+            <div class="lg:col-span-8 animate-fade-in-up delay-100">
+                <div class="prose prose-xl prose-navy max-w-none">
+                    <h2 class="text-3xl font-black text-navy-900 mb-8 uppercase tracking-tight">Tentang Kegiatan</h2>
+                    <p class="text-navy-600 leading-relaxed text-lg whitespace-pre-line">
+                        {{ $galeri->deskripsi ?? 'Tidak ada deskripsi tambahan untuk kegiatan ini.' }}
+                    </p>
                 </div>
             </div>
 
-            {{-- Back Button --}}
-            <div class="flex justify-center mt-12">
-                <a href="{{ route('public.galeri.index') }}"
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-navy-900 text-white font-semibold rounded-xl hover:bg-navy-800 transition-colors shadow-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    Kembali ke Galeri
-                </a>
+            {{-- Sidebar / Stats --}}
+            <div class="lg:col-span-4 space-y-8 animate-fade-in-up delay-200">
+                <div class="p-8 rounded-[2.5rem] bg-navy-900 text-white shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gold-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                    <h3 class="text-xl font-black mb-6 uppercase tracking-widest text-gold-500">Bagikan</h3>
+                    <div class="flex gap-4">
+                        <button class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </button>
+                        <button class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.31.974.974 1.248 2.242 1.31 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.336 2.633-1.31 3.608-.974.974-2.242 1.248-3.608 1.31-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.31-.974-.974-1.248-2.242-1.31-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.336-2.633 1.31-3.608.974-.974 2.242-1.248 3.608-1.31 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.337 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.337-.2 6.78-2.618 6.98-6.98.058-1.281.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </article>
 
-    {{-- Related Galeri --}}
-    @if($relatedGaleri->count() > 0)
-        <section class="py-20 px-6 bg-slate-50">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex items-center justify-between mb-12">
-                    <div>
-                        <span class="text-gold-600 font-bold tracking-[0.2em] uppercase text-xs mb-2 block">Galeri Lainnya</span>
-                        <h2 class="text-3xl md:text-4xl font-black text-navy-900 leading-none">
-                            Dokumentasi Terkait
-                        </h2>
-                    </div>
-                    <a href="{{ route('public.galeri.index') }}"
-                       class="hidden md:inline-flex items-center gap-2 text-navy-900 hover:text-gold-600 transition-colors font-bold border-b-2 border-navy-200 hover:border-gold-500 pb-1">
-                        Lihat Semua
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </a>
+        {{-- Related Items --}}
+        @if($relatedGaleri->count() > 0)
+            <div class="mt-32">
+                <div class="flex items-center gap-4 mb-12">
+                    <h3 class="text-3xl font-black text-navy-900 uppercase tracking-tight">Dokumentasi Lainnya</h3>
+                    <div class="h-1 flex-grow bg-navy-50"></div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                     @foreach($relatedGaleri as $related)
-                        <a href="{{ route('public.galeri.show', $related->slug) }}" class="group block">
-                            <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-navy-50 group-hover:border-gold-400/30">
-                                <!-- Image -->
-                                <div class="aspect-[4/3] overflow-hidden bg-navy-50 relative">
-                                    <img src="{{ asset($related->foto_galeri) }}"
-                                         alt="{{ $related->judul_galeri }}"
-                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-
-                                    <!-- Overlay -->
-                                    <div class="absolute inset-0 bg-gradient-to-t from-navy-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                                    <!-- View Icon -->
-                                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                        <div class="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg transform scale-50 group-hover:scale-100 transition-transform duration-500">
-                                            <svg class="w-7 h-7 text-navy-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Content -->
-                                <div class="p-6">
-                                    <h3 class="text-lg font-black text-navy-900 group-hover:text-gold-600 transition-colors leading-tight line-clamp-2">
-                                        {{ $related->judul_galeri }}
-                                    </h3>
-                                </div>
+                        <a href="{{ route('public.galeri.show', $related->slug) }}" class="group">
+                            <div class="aspect-square rounded-[2.5rem] overflow-hidden bg-navy-50 mb-6 shadow-lg transform group-hover:-translate-y-2 transition-all duration-500">
+                                <img src="{{ asset($related->foto_galeri) }}" alt="{{ $related->judul_galeri }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             </div>
+                            <h4 class="text-xl font-black text-navy-900 group-hover:text-gold-600 transition-colors leading-tight line-clamp-2">
+                                {{ $related->judul_galeri }}
+                            </h4>
                         </a>
                     @endforeach
                 </div>
             </div>
-        </section>
-    @endif
+        @endif
+    </div>
 </div>
 @endsection

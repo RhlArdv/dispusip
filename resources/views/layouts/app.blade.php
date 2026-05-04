@@ -220,7 +220,7 @@
 
                 @if(auth()->user()->hasPermission('view_galeri'))
                 @php $activeGaleri = request()->routeIs('galeri.*'); @endphp
-                <a href="#"
+                <a href="{{ route('galeri.index') }}"
                    class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
                           transition-all {{ $activeGaleri ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -233,7 +233,7 @@
 
                 @if(auth()->user()->hasPermission('view_video'))
                 @php $activeVideo = request()->routeIs('video.*'); @endphp
-                <a href="#"
+                <a href="{{ route('video.index') }}"
                    class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
                           transition-all {{ $activeVideo ? 'nav-item-active bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <svg class="w-[17px] h-[17px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -467,8 +467,8 @@
                         @if(auth()->user()->hasPermission('view_berita')){ name: 'Berita', url: '{{ route('berita.index') }}' },@endif
                         @if(auth()->user()->hasPermission('view_koleksi')){ name: 'Koleksi', url: '{{ route('koleksi.index') }}' },@endif
                         @if(auth()->user()->hasPermission('view_kegiatan')){ name: 'Kegiatan', url: '{{ route('kegiatan.index') }}' },@endif
-                        @if(auth()->user()->hasPermission('view_galeri')){ name: 'Galeri', url: '#' },@endif
-                        @if(auth()->user()->hasPermission('view_video')){ name: 'Video', url: '#' },@endif
+                        @if(auth()->user()->hasPermission('view_galeri')){ name: 'Galeri', url: '{{ route('galeri.index') }}' },@endif
+                        @if(auth()->user()->hasPermission('view_video')){ name: 'Video', url: '{{ route('video.index') }}' },@endif
                         { name: 'FAQ', url: '{{ route('faq.index') }}' },
                         { name: 'Link Access', url: '{{ route('link-access.index') }}' },
                         @if(auth()->user()->hasPermission('view_berita'))

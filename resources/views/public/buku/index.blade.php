@@ -126,7 +126,7 @@
 
         {{-- Books Grid --}}
         @if($buku->count() > 0)
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mb-12">
                 @foreach($buku as $book)
                     <a href="{{ route('public.buku.show', $book->slug) }}" 
                        class="book-card animate-fade-in-up group flex flex-col h-full bg-white rounded-3xl p-3 md:p-4 shadow-sm border border-slate-100 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-2 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 transition-all duration-500"
@@ -202,9 +202,7 @@
 
             {{-- Pagination --}}
             <div class="flex justify-center mt-12">
-                <div class="bg-white px-4 py-3 rounded-2xl shadow-sm border border-slate-100">
-                    {{ $buku->appends(request()->query())->links() }}
-                </div>
+                {{ $buku->appends(request()->query())->links('partials.pagination') }}
             </div>
         @else
             {{-- Empty State --}}

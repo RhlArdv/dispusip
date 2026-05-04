@@ -198,6 +198,7 @@ Route::get('/berita/{slug}', [\App\Http\Controllers\PublicBeritaController::clas
 Route::get('/kegiatan', [\App\Http\Controllers\PublicKegiatanController::class, 'index'])->name('public.kegiatan.index');
 Route::get('/kegiatan/{slug}', [\App\Http\Controllers\PublicKegiatanController::class, 'show'])->name('public.kegiatan.show');
 
+Route::get('/multimedia', [\App\Http\Controllers\PublicMultimediaController::class, 'index'])->name('public.multimedia.index');
 Route::get('/galeri', [PublicGaleriController::class, 'index'])->name('public.galeri.index');
 Route::get('/galeri/{slug}', [PublicGaleriController::class, 'show'])->name('public.galeri.show');
 

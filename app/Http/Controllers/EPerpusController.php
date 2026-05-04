@@ -48,16 +48,32 @@ class EPerpusController extends Controller
         ));
     }
 
-    public function rekomendasi()
+    public function rekomendasi(Request $request)
     {
-
         $buku = Buku::with('kategoriBuku')->latest()->take(10)->get();
 
-        $koleksiPerKategori = Koleksi::latest()
-            ->get()
-            ->groupBy(fn($item) => $item->kategori_nama ?? 'Umum');
+        $selectedCategory = $request->query('category');
 
-        return view('public.rekomendasi', compact('buku', 'koleksiPerKategori'));
+        // Get all unique categories to build the filter tabs
+        $categories = Koleksi::select('kategori')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'key' => $item->kategori,
+                    'name' => $item->kategori_nama
+                ];
+            });
+
+        $query = Koleksi::latest();
+
+        if ($selectedCategory) {
+            $query->where('kategori', $selectedCategory);
+        }
+
+        $koleksi = $query->paginate(8)->withQueryString();
+
+        return view('public.rekomendasi', compact('buku', 'koleksi', 'categories', 'selectedCategory'));
     }
 
     public function layanan()
