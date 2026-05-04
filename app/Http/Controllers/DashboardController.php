@@ -8,12 +8,12 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Stats placeholder - akan diupdate setelah migrations arsip/berita dll
         $stats = (object) [
-            'total_arsip' => 0,
-            'total_berita' => 0,
-            'total_galeri' => 0,
-            'total_users' => \App\Models\User::count(),
+            'total_arsip'  => \App\Models\Arsip::count(),
+            'total_berita' => \App\Models\Berita::count(),
+            'total_galeri' => \App\Models\Galeri::count(),
+            'total_users'  => \App\Models\User::count(),
+            'total_layanan'=> \App\Models\Layanan::count(),
         ];
 
         return view('dashboard', compact('stats'));

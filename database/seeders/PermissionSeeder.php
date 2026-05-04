@@ -112,6 +112,12 @@ class PermissionSeeder extends Seeder
             ['key' => 'edit_link_access', 'display_name' => 'Edit Link Access', 'group' => 'Link Access', 'description' => 'Mengedit link access'],
             ['key' => 'delete_link_access', 'display_name' => 'Delete Link Access', 'group' => 'Link Access', 'description' => 'Menghapus link access'],
 
+            // Layanan E-Perpus
+            ['key' => 'view_layanan', 'display_name' => 'View Layanan', 'group' => 'Layanan E-Perpus', 'description' => 'Melihat daftar layanan E-Perpus'],
+            ['key' => 'create_layanan', 'display_name' => 'Create Layanan', 'group' => 'Layanan E-Perpus', 'description' => 'Menambah layanan sekunder baru'],
+            ['key' => 'edit_layanan', 'display_name' => 'Edit Layanan', 'group' => 'Layanan E-Perpus', 'description' => 'Mengedit URL dan teks layanan'],
+            ['key' => 'delete_layanan', 'display_name' => 'Delete Layanan', 'group' => 'Layanan E-Perpus', 'description' => 'Menghapus layanan sekunder'],
+
             // Galeri
             ['key' => 'view_galeri', 'display_name' => 'View Galeri', 'group' => 'Galeri', 'description' => 'Melihat daftar galeri'],
             ['key' => 'create_galeri', 'display_name' => 'Create Galeri', 'group' => 'Galeri', 'description' => 'Membuat galeri baru'],

@@ -10,6 +10,7 @@ use App\Http\Controllers\PublicVideoController;
 use App\Http\Controllers\JdihController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KoleksiController;
+use App\Http\Controllers\LayananController;
 use App\Http\Controllers\LinkAccessController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\ProfileController;
@@ -315,6 +316,10 @@ Route::middleware('auth')->group(function () {
         // Link Access Management
         Route::resource('link-access', LinkAccessController::class)
             ->middleware(['permission:view_link_access']);
+
+        // Layanan E-Perpus Management
+        Route::resource('layanans', LayananController::class)
+            ->middleware(['permission:view_layanan']);
 
         // Tickets Management
         Route::get('tickets', [\App\Http\Controllers\TicketController::class, 'index'])

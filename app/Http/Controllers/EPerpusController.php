@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Infografis;
 use App\Models\Berita;
 use App\Models\Koleksi;
+use App\Models\Layanan;
 use App\Models\Testimoni;
 use App\Models\Buku;
 use Illuminate\Http\Request;
@@ -39,12 +40,20 @@ class EPerpusController extends Controller
             ->groupBy(fn($item) => $item->kategori_nama ?? 'Umum')
             ->map(fn($items) => $items->take(8));
 
+        // 6. Layanan — ambil dari database
+        // Section 'utama'  = Bento Grid (5 item, tidak bisa tambah/hapus, urut by id)
+        // Section 'sekunder' = Layanan Perpustakaan (grid seragam, bisa CRUD)
+        $layananUtama = Layanan::utama()->aktif()->orderBy('order_number')->get();
+        $layananSekunder = Layanan::sekunder()->aktif()->orderBy('order_number')->get();
+
         return view('eperpus.index', compact(
             'infografis',
             'beritaTerbaru',
             'bukuTerbaru',
             'testimoni',
-            'koleksiPerKategori'
+            'koleksiPerKategori',
+            'layananUtama',
+            'layananSekunder'
         ));
     }
 
@@ -78,7 +87,9 @@ class EPerpusController extends Controller
 
     public function layanan()
     {
-        // Karena datanya statis/hardcoded di view, kita cukup return view-nya saja
-        return view('public.layanan'); // Sesuaikan path folder view kamu, misal 'eperpus.layanan'
+        $layananUtama = Layanan::utama()->aktif()->orderBy('order_number')->get();
+        $layananSekunder = Layanan::sekunder()->aktif()->orderBy('order_number')->get();
+
+        return view('public.layanan', compact('layananUtama', 'layananSekunder'));
     }
 }
